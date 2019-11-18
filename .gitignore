@@ -8,4 +8,4 @@ build/
 .idea
 /gradle*
 !gradle.properties
-!gradle
+!gradlegra
