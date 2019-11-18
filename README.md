@@ -8,9 +8,30 @@
 
 
 
-##### 查看源码
+##### 查看源码(内含submodule)
 
 ```
-> 建议
+ 令行行具体步骤
+
+ git clone https://github.com/zwping/pseries --depth 1
+ cd pseries
+ git submodule init && git submodule update
+
+
+
+```
+
+
+##### 引用
+
+> jitpack
+
+> submodule
+
+```
+git submodule add https://github.com/zwping/PSeries_lib_code plib_code
+git submodule add https://github.com/zwping/PSeries_lib_frame plib_frame
+git submodule add https://github.com/zwping/PSeries_lib_update plib_update
+
 
 ```
