@@ -1,1 +1,1 @@
-include ':sample', ':plib_code', ':plib_update', ':plib_frame', ':plib_junit'
+include ':sample', ':plib_code', ':plib_update', ':plib_frame'
