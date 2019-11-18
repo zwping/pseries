@@ -16,8 +16,8 @@
  git clone https://github.com/zwping/pseries --depth 1
  cd pseries
  git submodule init && git submodule update
-
-
+ 
+ use as open pseries project....
 
 ```
 
@@ -26,12 +26,17 @@
 
 > jitpack
 
+```
+...
+```
+
 > submodule
 
 ```
 git submodule add https://github.com/zwping/PSeries_lib_code plib_code
 git submodule add https://github.com/zwping/PSeries_lib_frame plib_frame
 git submodule add https://github.com/zwping/PSeries_lib_update plib_update
+vim setttings.gradle -> add....
 
 
 ```
