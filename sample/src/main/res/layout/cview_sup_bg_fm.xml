@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#fff"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <win.zwping.code.review.PScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <win.zwping.code.cview.SupBgLayout
+                android:layout_width="100dp"
+                android:layout_height="30dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="无任何设置"
+                    android:textSize="12dp" />
+            </win.zwping.code.cview.SupBgLayout>
+
+            <win.zwping.code.cview.SupBgLayout
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:background="#666"
+                app:p_border_color="#ff0"
+                app:p_circle="true">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="圆" />
+            </win.zwping.code.cview.SupBgLayout>
+
+            <win.zwping.code.cview.SupBgLayout
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:background="#666"
+                app:p_radius="5dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="圆角四边形"
+                    android:textColor="#000"
+                    android:textSize="12dp" />
+            </win.zwping.code.cview.SupBgLayout>
+
+            <win.zwping.code.cview.SupBgLayout
+                android:layout_width="100dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:background="#666"
+                app:p_bottom_left_radius="6dp"
+                app:p_bottom_right_radius="6dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="控制某个角的角度"
+                    android:textSize="12dp" />
+            </win.zwping.code.cview.SupBgLayout>
+
+            <win.zwping.code.cview.SupBgLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                android:background="#666"
+                app:p_border_color="#ff0"
+                app:p_border_width="1dp"
+                app:p_bottom_left_radius="6dp"
+                app:p_bottom_right_radius="6dp"
+                app:p_circle="true"
+                app:p_radius="6dp"
+                app:p_top_left_radius="6dp"
+                app:p_top_right_radius="6dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="所有参数设置"
+                    android:textSize="12dp" />
+            </win.zwping.code.cview.SupBgLayout>
+
+            <win.zwping.code.cview.SupBgLayout
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                android:background="#f0f"
+                app:p_circle="true">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="10°"
+                    android:textColor="#fff"
+                    android:textSize="10dp" />
+            </win.zwping.code.cview.SupBgLayout>
+
+            <win.zwping.code.cview.SupBgLayout
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                app:p_border_color="#f0f"
+                app:p_border_width="1dp"
+                app:p_circle="true">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="10°"
+                    android:textColor="#000"
+                    android:textSize="10dp" />
+            </win.zwping.code.cview.SupBgLayout>
+
+            <win.zwping.code.cview.SupBgLayout
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="5dp"
+                app:p_border_color="#f0f"
+                app:p_border_width="1dp"
+                app:p_radius="5dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="10°"
+                    android:textColor="#000"
+                    android:textSize="10dp" />
+            </win.zwping.code.cview.SupBgLayout>
+
+            <win.zwping.code.cview.SupBgLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="5dp"
+                app:p_circle="true">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/sample_bg" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="这是图片"
+                    android:textColor="#fff"
+                    android:textSize="10dp" />
+            </win.zwping.code.cview.SupBgLayout>
+
+            <win.zwping.code.cview.SupBgLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="5dp"
+                app:p_border_color="#f0f"
+                app:p_top_left_radius="15dp">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/sample_bg" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="这是图片"
+                    android:textColor="#fff"
+                    android:textSize="10dp" />
+            </win.zwping.code.cview.SupBgLayout>
+
+        </LinearLayout>
+    </win.zwping.code.review.PScrollView>
+</LinearLayout>

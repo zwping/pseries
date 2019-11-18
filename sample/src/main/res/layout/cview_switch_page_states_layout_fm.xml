@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#dedede"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/loading_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.16"
+            android:gravity="center"
+            android:text="Loading" />
+
+        <TextView
+            android:id="@+id/empty_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.16"
+            android:gravity="center"
+            android:text="Empty" />
+
+        <TextView
+            android:id="@+id/net_error_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.16"
+            android:gravity="center"
+            android:text="NetError" />
+
+        <TextView
+            android:id="@+id/error_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.16"
+            android:gravity="center"
+            android:text="Error" />
+
+        <TextView
+            android:id="@+id/cus_view_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.16"
+            android:gravity="center"
+            android:text="CusView" />
+
+        <TextView
+            android:id="@+id/content_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.16"
+            android:gravity="center"
+            android:text="Content" />
+
+    </LinearLayout>
+
+    <win.zwping.code.cview.SwitchPageStateLayout
+        android:id="@+id/switch_page_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:p_cusView="@layout/cview_child_cus_view"
+        app:p_default_show_loading="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="默认需要显示的内容" />
+
+        </RelativeLayout>
+    </win.zwping.code.cview.SwitchPageStateLayout>
+</LinearLayout>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <win.zwping.code.cview.EtWordCountLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+        <win.zwping.code.review.PEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="无任何参数设置"
+            android:textSize="12dp" />
+    </win.zwping.code.cview.EtWordCountLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="#f5f5f5" />
+
+    <win.zwping.code.cview.EtWordCountLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp">
+
+        <win.zwping.code.review.PEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="maxLength"
+            android:maxLength="200"
+            android:textSize="12dp" />
+    </win.zwping.code.cview.EtWordCountLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="#f5f5f5" />
+
+    <win.zwping.code.cview.EtWordCountLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:p_singleInputCountEnable="true">
+
+        <win.zwping.code.review.PEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="singleInputCountEnable (maxLength必须设置)"
+            android:maxLength="200"
+            android:textSize="12dp" />
+    </win.zwping.code.cview.EtWordCountLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="#f5f5f5" />
+
+    <win.zwping.code.cview.EtWordCountLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:p_countOffBottom="20dp"
+        app:p_countOffRight="20dp"
+        app:p_countTextColor="#FF0000"
+        app:p_countTextSize="8dp"
+        app:p_inputCountEnable="true"
+        app:p_singleInputCountEnable="false">
+
+        <win.zwping.code.review.PEditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="所有参数设置"
+            android:maxLength="200"
+            android:textSize="12dp" />
+    </win.zwping.code.cview.EtWordCountLayout>
+
+</LinearLayout>

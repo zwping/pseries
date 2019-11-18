@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <win.zwping.code.review.PEditText
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@null"
+        android:gravity="center_vertical"
+        android:hint="账号/ 手机号"
+        android:text="123123123123"
+        android:textSize="12dp" />
+
+    <RelativeLayout
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:background="#f5f5f5">
+
+        <win.zwping.code.review.PEditText
+            android:id="@+id/pet"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="10dp"
+            android:hint="密码"
+            android:paddingLeft="10dp"
+            android:paddingRight="20dp"
+            android:textSize="12dp"
+            android:background="@null"
+            app:p_clear_text_enable="true"
+            app:p_psw_icon_tint="#f00"
+            app:p_psw_toggle_enable="true"
+            app:p_regexType="psw_simple" />
+    </RelativeLayout>
+</LinearLayout>

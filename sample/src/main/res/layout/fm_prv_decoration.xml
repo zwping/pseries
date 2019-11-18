@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <win.zwping.code.review.PRecyclerView
+        android:id="@+id/prv1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:p_simple_decoration_enable="true" />
+
+    <win.zwping.code.review.PRecyclerView
+        android:id="@+id/prv2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:p_decoration_color="@android:color/holo_red_dark"
+        app:p_decoration_drawable="@mipmap/ic_launcher"
+        app:p_decoration_width="5dp"
+        app:p_layout_manager="gridLayoutManager"
+        app:p_simple_decoration_enable="true"
+        app:p_spanCount="2" />
+
+</LinearLayout>

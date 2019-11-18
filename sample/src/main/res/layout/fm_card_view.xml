@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="简单的 背景色 控制"
+        android:textSize="12dp" />
+
+    <win.zwping.code.review.PCardView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cardBackgroundColor="#0ff"
+        app:cardCornerRadius="5dp"
+        app:p_unable_bg_color="#666">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="Sample CardView" />
+    </win.zwping.code.review.PCardView>
+
+    <win.zwping.code.review.PCardView
+        android:id="@+id/cv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:cardBackgroundColor="#0ff"
+        app:cardCornerRadius="5dp"
+        app:p_unable_bg_color="#666">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="Enable" />
+    </win.zwping.code.review.PCardView>
+
+    <win.zwping.code.review.PCardView
+        android:id="@+id/cv2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:cardBackgroundColor="#0ff"
+        app:cardCornerRadius="5dp"
+        app:p_pressed_bg_color="#ff0"
+        app:p_selected_bg_color="#666">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:gravity="center"
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:text="Selected (clickable)" />
+    </win.zwping.code.review.PCardView>
+
+</LinearLayout>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <win.zwping.code.review.PViewPager
+        android:id="@+id/pvp1"
+        android:layout_width="match_parent"
+        android:layout_height="200dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#dedede" />
+
+    <win.zwping.code.review.PTabLayout
+        android:id="@+id/ptl"
+        android:layout_width="match_parent"
+        android:layout_height="30dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#dedede" />
+
+    <win.zwping.code.review.PViewPager
+        android:id="@+id/pvp2"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+
+    <win.zwping.code.review.PTabLayout
+        android:id="@+id/pt3"
+        android:layout_width="match_parent"
+        android:layout_height="50dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#dedede" />
+
+    <win.zwping.code.review.PViewPager
+        android:id="@+id/pvp3"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="无任何侵入"
+        android:textSize="12dp" />
+
+    <win.zwping.code.review.PButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello Word" />
+
+    <include layout="@layout/child_line" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:text="倒计时功能"
+        android:textSize="12dp" />
+
+    <win.zwping.code.cview.SupBgLayout
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:background="#dedede"
+        app:p_radius="5dp">
+
+        <win.zwping.code.review.PButton
+            android:id="@+id/pbt"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="#000"
+            android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="#fff"
+            app:p_cd_default_txt="点我（全参数）"
+            app:p_cd_hint_txt="再等%s 秒后可点我"
+            app:p_cd_re_get_txt="再点我"
+            app:p_cd_time="5"
+            app:p_model="count_down" />
+    </win.zwping.code.cview.SupBgLayout>
+
+    <win.zwping.code.review.PButton
+        android:id="@+id/pbt1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:p_model="count_down" />
+
+    <include layout="@layout/child_line" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="简单的 背景色/文本颜色 控制"
+        android:textSize="12dp" />
+
+
+    <win.zwping.code.review.PButton
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:background="#0ff"
+        android:gravity="center"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="sample button" />
+
+    <win.zwping.code.review.PButton
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginTop="5dp"
+        android:background="#0ff"
+        android:enabled="false"
+        android:gravity="center"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="Enable (xml) (preview)"
+        app:p_selected_text_color="#0ff"
+        app:p_unable_bg_color="#dedede"
+        app:p_unable_text_color="#666" />
+
+    <win.zwping.code.review.PButton
+        android:id="@+id/pbtn2"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_marginTop="5dp"
+        android:background="#0ff"
+        android:gravity="center"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:text="Selected (kt / java)"
+        android:textColor="#000"
+        app:p_pressed_text_color="#f00" />
+
+</LinearLayout>

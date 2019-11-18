@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="MenuBar"
+        android:textSize="12dp" />
+
+    <win.zwping.code.cview.MenuBar
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        app:p_content_color="#000"
+        app:p_content_txt="Content"
+        app:p_title_icon="@drawable/sample_bg"
+        app:p_title_icon_visibility="visibility"
+        app:p_title_icon_wh="15dp"
+        app:p_title_txt="Title" />
+
+    <win.zwping.code.cview.MenuBar
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:p_content_hint_txt="Please Input"
+        app:p_content_is_text_or_input="false"
+        app:p_title_margin_left="12dp"
+        app:p_title_txt="Title" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="标准用法：在主模块中重写一个MenuBar"
+        android:textSize="12dp" />
+
+    <win.zwping.pseries.fm.cview.review.MBar
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:p_title_txt="菜单栏1"
+        app:p_top_line_visibility="visibility" />
+
+    <win.zwping.pseries.fm.cview.review.MBar
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:p_title_txt="菜单栏2" />
+
+    <win.zwping.pseries.fm.cview.review.MBar
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:p_title_txt="菜单栏3" />
+
+</LinearLayout>

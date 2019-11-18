@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="认识 4个模块 就可理解Bar是怎么替换ToolBar了\n
+Title / Return / Menu / BottomLine \n
+详细使用"
+        android:textSize="12dp" />
+
+
+    <win.zwping.code.cview.Bar
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:p_bottom_line_color="#f00"
+        app:p_menu_txt="Menu"
+        app:p_return_arrow_visibility="gone"
+        app:p_return_txt="Return"
+        app:p_title_txt="Title" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="标准用法：在主模块中重写一个Bar"
+        android:textSize="12dp" />
+
+
+    <win.zwping.pseries.fm.cview.review.Bar
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:p_title_txt="重写的Bar" />
+</LinearLayout>

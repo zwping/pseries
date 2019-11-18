@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <win.zwping.code.review.PImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:p_default_show_loading="true"
+        app:p_errorImg="@mipmap/page_state_error"
+        app:p_loadingImg="@mipmap/page_state_error" />
+
+    <win.zwping.code.review.PImageView
+        android:id="@+id/piv1"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:scaleType="centerCrop"
+        android:layout_marginTop="10dp"
+        app:p_default_show_loading="true"
+        app:p_errorImg="@mipmap/page_state_error"
+        app:p_loadingImg="@mipmap/page_state_error"
+        app:p_processorType="circle" />
+
+    <win.zwping.code.review.PImageView
+        android:id="@+id/piv2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        app:p_default_show_loading="true"
+        app:p_errorImg="@mipmap/page_state_error"
+        app:p_loadingImg="@mipmap/page_state_error"
+        app:p_processorType="roundRect"
+        app:p_radius="20dp" />
+    <win.zwping.code.review.PImageView
+        android:id="@+id/piv3"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        app:p_default_show_loading="true"
+        app:p_errorImg="@mipmap/page_state_error"
+        app:p_loadingImg="@mipmap/page_state_error"
+        app:p_processorType="roundRect"
+        app:p_radius="20dp" />
+    <win.zwping.code.review.PImageView
+        android:id="@+id/piv4"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="10dp"
+        app:p_default_show_loading="true"
+        app:p_errorImg="@mipmap/page_state_error"
+        app:p_loadingImg="@mipmap/page_state_error"
+        app:p_processorType="roundRect"
+        app:p_radius="20dp" />
+
+
+</LinearLayout>

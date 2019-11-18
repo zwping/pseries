@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="xml控制状态色" />
+
+        <win.zwping.code.review.PTextView
+            android:id="@+id/ptv01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:background="#dedede"
+            android:padding="5dp"
+            android:text="select"
+            android:textColor="#000"
+            app:p_selected_bg_color="#0ff"
+            app:p_selected_text_color="#fff" />
+
+        <win.zwping.code.review.PTextView
+            android:id="@+id/ptv02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:background="#dedede"
+            android:padding="5dp"
+            android:text="unable"
+            android:textColor="#000"
+            app:p_normal_bg_color="#00f"
+            app:p_unable_bg_color="#0ff"
+            app:p_unable_text_color="#fff" />
+
+        <win.zwping.code.review.PTextView
+            android:id="@+id/ptv03"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:background="#dedede"
+            android:padding="5dp"
+            android:text="pressed"
+            android:textColor="#000"
+            app:p_pressed_bg_color="#0ff"
+            app:p_pressed_text_color="#fff" />
+
+        <CheckedTextView
+            android:id="@+id/ptv04"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:background="#dedede"
+            android:padding="5dp"
+            android:text="checked(未复写相关控件)"
+            android:textColor="#000" />
+
+        <win.zwping.code.review.PEditText
+            android:id="@+id/ptv05"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:background="#dedede"
+            android:padding="5dp"
+            android:text="focused"
+            android:textColor="#000"
+            app:p_focused_bg_color="#0ff"
+            app:p_focused_text_color="#fff" />
+
+        <win.zwping.code.review.PTextView
+            android:id="@+id/ptv06"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:background="#dedede"
+            android:padding="5dp"
+            android:text="normal"
+            android:textColor="#000" />
+
+        <win.zwping.code.review.PTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:background="#dedede"
+            android:padding="5dp"
+            android:text="null"
+            android:textColor="#000" />
+
+        <include layout="@layout/child_line" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:background="#dedede"
+            android:text="默认背景色 / 文字颜色"
+            android:textColor="#000" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:background="#0ff"
+            android:text="变换后背景色 / 文字颜色"
+            android:textColor="#fff" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="#dedede" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="kt / java控制状态色" />
+
+
+        <win.zwping.code.review.PTextView
+            android:id="@+id/ptv11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:background="#dedede"
+            android:padding="5dp"
+            android:text="select"
+            android:textColor="#000" />
+
+        <win.zwping.code.review.PTextView
+            android:id="@+id/ptv12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:background="#dedede"
+            android:padding="5dp"
+            android:text="unable"
+            android:textColor="#000" />
+
+        <win.zwping.code.review.PTextView
+            android:id="@+id/ptv13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:background="#dedede"
+            android:padding="5dp"
+            android:text="pressed"
+            android:textColor="#000" />
+
+        <CheckedTextView
+            android:id="@+id/ptv14"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:background="#dedede"
+            android:text="checked(未复写相关控件)"
+            android:textColor="#000"
+            android:padding="5dp" />
+
+        <win.zwping.code.review.PEditText
+            android:id="@+id/ptv15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:background="#dedede"
+            android:padding="5dp"
+            android:text="focused"
+            android:textColor="#000" />
+
+        <win.zwping.code.review.PTextView
+            android:id="@+id/ptv16"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:background="#dedede"
+            android:padding="5dp"
+            android:text="normal"
+            android:textColor="#000" />
+
+        <win.zwping.code.review.PTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:background="#dedede"
+            android:padding="5dp"
+            android:text="null"
+            android:textColor="#000" />
+
+    </LinearLayout>
+
+
+</LinearLayout>
