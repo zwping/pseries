@@ -51,8 +51,8 @@ class StickPRvFm : BaseFm() {
             helper?.setText(R.id.tv, item?.header)?.itemView?.tag = item
         }
 
-        override fun convert(helper: BaseViewHolder?, item: Bean?) {
-            helper?.setBackgroundColor(android.R.id.text1, Color.GRAY)?.setText(android.R.id.text1, item?.t?.s)?.itemView?.tag = item
+        override fun convert(helper: BaseViewHolder, item: Bean?) {
+            helper.setBackgroundColor(android.R.id.text1, Color.GRAY)?.setText(android.R.id.text1, item?.t?.s)?.itemView?.tag = item
         }
 
     }

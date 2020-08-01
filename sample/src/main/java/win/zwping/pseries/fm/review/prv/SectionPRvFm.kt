@@ -38,7 +38,7 @@ class SectionPRvFm : BaseFm() {
 
     data class B(var s: String? = null) : Serializable
 
-    class Adapter : BaseSectionQuickAdapter<Bean, BaseViewHolder> {
+    inner class Adapter : BaseSectionQuickAdapter<Bean, BaseViewHolder> {
 
         constructor(layoutResId: Int, sectionHeadResId: Int, data: MutableList<Bean>?) : super(layoutResId, sectionHeadResId, data)
 
@@ -46,8 +46,8 @@ class SectionPRvFm : BaseFm() {
             helper?.setBackgroundColor(android.R.id.text1, Color.YELLOW)?.setText(android.R.id.text1, item?.header)
         }
 
-        override fun convert(helper: BaseViewHolder?, item: Bean?) {
-            helper?.setBackgroundColor(android.R.id.text1, Color.GRAY)?.setText(android.R.id.text1, item?.t?.s)
+        override fun convert(helper: BaseViewHolder, item: Bean?) {
+            helper.setBackgroundColor(android.R.id.text1, Color.GRAY)?.setText(android.R.id.text1, item?.t?.s)
         }
     }
 }

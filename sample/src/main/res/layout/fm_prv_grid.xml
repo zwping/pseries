@@ -10,6 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:p_spanCount="3"
+        app:p_decoration_color="#0f0"
+        app:p_simple_decoration_enable="true"
         app:p_layout_manager="gridLayoutManager" />
 
 </LinearLayout>
