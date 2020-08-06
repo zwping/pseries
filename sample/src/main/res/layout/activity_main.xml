@@ -17,12 +17,17 @@
             android:layout_height="match_parent"
             android:background="#fff">
 
+            <win.zwping.code.review.PScrollView
+                android:id="@+id/psv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
             <win.zwping.code.review.PRecyclerView
                 android:id="@+id/prv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:p_simple_decoration_enable="true"
                 android:background="?android:attr/selectableItemBackground" />
+            </win.zwping.code.review.PScrollView>
 
             <FrameLayout
                 android:id="@+id/frame_layout"

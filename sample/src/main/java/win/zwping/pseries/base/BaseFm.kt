@@ -1,5 +1,6 @@
 package win.zwping.pseries.base
 
+import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import kotlinx.android.synthetic.main.fm_base.*
@@ -14,12 +15,14 @@ import win.zwping.pseries.R
  */
 abstract class BaseFm : BasicFm() {
 
+    protected val ac: Activity? by lazy { mActivity }
+
     override fun bindLayout() = R.layout.fm_base
 
     override fun initView(savedInstanceState: Bundle?) {
         root_layout?.setOnClickListener { }
         floating_btn?.setOnClickListener { lis?.onClick(null);FragmentUtil.remove(this) }
-        inflater.inflate(bindChildLayout(), root_layout)
+        layoutInflater.inflate(bindChildLayout(), root_layout, false)
         if (hideFActionButton()) floating_btn?.visibility = View.GONE
     }
 

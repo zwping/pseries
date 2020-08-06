@@ -8,6 +8,7 @@ import android.widget.ProgressBar
 import kotlinx.android.synthetic.main.activity_main.*
 import win.zwping.code.review.PProgressBar
 import win.zwping.code.utils.FragmentUtil.replace
+import win.zwping.code.utils.HandlerUtil
 import win.zwping.frame.comm.CommPop
 import win.zwping.pseries.base.BaseAc
 import win.zwping.pseries.base.BaseBean
@@ -89,8 +90,22 @@ class MainActivity : BaseAc() {
                 "ProgressBar重写" -> replace(it, PProgressBarFm())
                 "PImageView复写" -> replace(it, PIvFm())
                 "未读消息" -> replace(it, BadgeViewFm())
+                "未读消息" -> replace(it, BadgeViewFm())
+                "未读消息" -> replace(it, BadgeViewFm())
+                "未读消息" -> replace(it, BadgeViewFm())
+                "未读消息" -> replace(it, BadgeViewFm())
+                "未读消息" -> replace(it, BadgeViewFm())
+                "未读消息" -> replace(it, BadgeViewFm())
             }
         }
+
+        psv?.setOnLoadMoreLis {
+            prv?.getAdapterSup()?.loadMoreViewCount()
+            println(123)
+        }
+        prv.getAdapterSup().loadMoreEnd(true)
+
+
     }
 
     private fun replace(title: String, fm: BaseFm) {
