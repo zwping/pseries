@@ -6,9 +6,12 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
 import kotlinx.android.synthetic.main.activity_main.*
+import win.zwping.code.cview.StateLayout
 import win.zwping.code.review.PProgressBar
 import win.zwping.code.utils.FragmentUtil.replace
 import win.zwping.code.utils.HandlerUtil
+import win.zwping.code.utils.LogUtil
+import win.zwping.code.utils.SDCardUtil
 import win.zwping.frame.comm.CommPop
 import win.zwping.pseries.base.BaseAc
 import win.zwping.pseries.base.BaseBean
@@ -31,9 +34,13 @@ class MainActivity : BaseAc() {
                     ?.setBackgroundColor(android.R.id.text1, Color.parseColor("#dedede"))
         }
         BaseBean()
+        StateLayout.wrap(this).apply {
+            init { }
+            HandlerUtil.runOnUiThreadDelay({ showContentView() }, 1000)
+        }
 
         val pro = PProgressBar(this, null, android.R.attr.progressBarStyleHorizontal)
-        pro.setHorizontalParams(Color.RED,Color.YELLOW)
+        pro.setHorizontalParams(Color.RED, Color.YELLOW)
 //        pro.secondaryProgress = Color.RED
 //        pro.setBackgroundColor(Color.BLACK)
         pro.progress = 10; pro.max = 100
@@ -58,24 +65,20 @@ class MainActivity : BaseAc() {
             list1.add(Bean("title$i"))
         }
 
-        for (i in list.indices) {
-            println(list[i].size)
-        }
     }
 
     internal inner class Bean(var title: String)
 
     override fun doBusiness() {
-        val list = listOf("箭头控件(ArrowView)", "自定义Bar(替换ToolBar)", "文本框计数控件(EtWordCountLayout)", "自定义MenuBar(菜单Bar)", "超级背景控件(SupBgLayout)", "页面状态切换控件(SwitchPageStateLayout)", " ",
-                "TabLayoutCustomView定制化", "Button复写", "ViewPager复写", "RecyclerView复写", "EditText复写", "CardView复写", "视图简单的状态颜色切换", "WebView重写", "ProgressBar重写", "PImageView复写","未读消息")
+        val list = listOf("箭头控件(ArrowView)", "自定义Bar(替换ToolBar)", "文本框计数控件(EtWordCountLayout)", "自定义MenuBar(菜单Bar)", "超级背景控件(SupBgLayout)", "页面状态切换控件(StateLayout)", " ",
+                "TabLayoutCustomView定制化", "Button复写", "ViewPager复写", "RecyclerView复写", "EditText复写", "CardView复写", "视图简单的状态颜色切换", "WebView重写", "ProgressBar重写", "PImageView复写", "未读消息")
         prv?.setNewData(list)
-
         prv?.adapterSup?.setOnItemClickListener { adapter, view, position ->
             val it = prv.adapterSup.data[position].toString()
             when (it) {
                 "文本框计数控件(EtWordCountLayout)" -> replace(it, EtWordCountLayoutFm())
                 "超级背景控件(SupBgLayout)" -> replace(it, SupBgLayoutFm())
-                "页面状态切换控件(SwitchPageStateLayout)" -> replace(it, SwitchPageStateLayoutFm())
+                "页面状态切换控件(StateLayout)" -> replace(it, StateLayoutFm())
                 "箭头控件(ArrowView)" -> replace(it, ArrowViewFm())
                 "自定义Bar(替换ToolBar)" -> replace(it, BarFm())
                 "自定义MenuBar(菜单Bar)" -> replace(it, MenuBarFm())
@@ -98,14 +101,19 @@ class MainActivity : BaseAc() {
                 "未读消息" -> replace(it, BadgeViewFm())
             }
         }
+        prv?.adapterSup?.setOnItemLongClickListener { baseQuickAdapter, view, position ->
+            val it = prv.adapterSup.data[position].toString()
+            when (it) {
+                "页面状态切换控件(StateLayout)" -> replace(it, SwitchPageStateLayoutFm())
+            }
+            true
+        }
 
         psv?.setOnLoadMoreLis {
-            prv?.getAdapterSup()?.loadMoreViewCount()
+//            prv?.getAdapterSup()?.loadMoreViewCount()
             println(123)
         }
         prv.getAdapterSup().loadMoreEnd(true)
-
-
     }
 
     private fun replace(title: String, fm: BaseFm) {

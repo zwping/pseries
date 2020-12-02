@@ -25,7 +25,7 @@ class SwitchPageStateLayoutFm : BaseFm() {
         switch_page_layout?.setOnRetryClickListener { switch_page_layout?.showLoading();showToast("刷新，重新获取数据") }
 
         showToast("默认加载Loading...")
-        HandlerUtil.runOnUiThreadDelay({ if (isChangeUi) switch_page_layout.showContent() }, 1000)
+        HandlerUtil.runOnUiThreadDelay({ if (isChangeUi) switch_page_layout?.showContent() }, 1000)
     }
 
 }

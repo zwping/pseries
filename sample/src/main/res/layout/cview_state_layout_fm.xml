@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="#dedede"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/loading_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.16"
+                android:gravity="center"
+                android:text="Loading" />
+
+            <TextView
+                android:id="@+id/empty_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.16"
+                android:gravity="center"
+                android:text="Empty" />
+
+
+            <TextView
+                android:id="@+id/error_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.16"
+                android:gravity="center"
+                android:text="Error" />
+
+
+            <TextView
+                android:id="@+id/content_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0.16"
+                android:gravity="center"
+                android:text="Content" />
+
+        </LinearLayout>
+
+        <win.zwping.code.cview.StateLayout
+            android:id="@+id/state_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:_default_show_loading="true"
+            app:_emptyLayoutId="@layout/child_page_state_net_error_layout">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="默认需要显示的内容" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:paddingTop="20dp"
+                android:text="默认需要显示的内容" />
+
+        </win.zwping.code.cview.StateLayout>
+    </LinearLayout>
+</RelativeLayout>

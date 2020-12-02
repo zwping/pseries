@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/search"
+        android:icon="@drawable/ic_baseline_search_24"
+        android:title="搜索"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/about"
+        android:icon="@drawable/ic_baseline_house_24"
+        android:title="关于我们"
+        app:showAsAction="ifRoom" />
+<!--    <item-->
+<!--        android:id="@+id/more"-->
+<!--        android:icon="@drawable/ic_baseline_more_horiz_24"-->
+<!--        android:title="更多"-->
+<!--        app:showAsAction="ifRoom" />-->
+
+    <item
+        android:id="@+id/setting"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="设置"
+        app:showAsAction="ifRoom" />
+
+
+</menu>

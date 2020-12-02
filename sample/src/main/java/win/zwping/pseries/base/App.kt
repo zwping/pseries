@@ -5,6 +5,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout
 import com.scwang.smartrefresh.layout.footer.ClassicsFooter
 import com.scwang.smartrefresh.layout.header.ClassicsHeader
 import win.zwping.code.basic.BasicApp
+import win.zwping.code.cview.StateLayout
 import win.zwping.pseries.R
 
 /**
@@ -14,6 +15,7 @@ import win.zwping.pseries.R
  */
 class App : BasicApp() {
     override fun init() {
+        // StateLayout.appInit(loadingLayoutId = R.layout.comm_pop_loading,animDuration = 0)
     }
 
     override fun debugInit() {

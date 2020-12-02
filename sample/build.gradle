@@ -42,3 +42,49 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0-rc02'
     implementation project(':plib_frame')
 }
+
+task _test {
+    // dependsOn 'assembleRelease' // 依赖于另外一个task，先执行依赖
+    doLast {
+        // -------------- Config ----------------
+        def firToken = '526553d43bd95c5da73ce649dc826158'
+        def pys = '/Users/feiyan/zwping/mac_script/yikao_fir.py' // py脚本本地路径
+        def module = '/sample' // 主模块名 AS默认app
+        def channel = '' // 渠道名
+        // -------------- Config ----------------
+
+        def dir = System.getProperty("user.dir") + module + '/build/outputs/apk' + (channel.isEmpty() ? '' : ('/' + channel)) + '/release'
+        def ins = String.format('python3 %s %s %s', pys, dir, firToken)
+        println('指令: ' + ins)
+
+        // HttpURLConnection conn = new URL('https://api.zwping.com/hello').openConnection()
+        // conn.setRequestMethod('GET')
+        // println(conn.getResponseCode())
+        // if(conn.getResponseCode() == 200){
+        //     println(is2String(conn.getInputStream()))
+        // }
+        executeIns(ins)
+    }
+}
+
+private static String is2String(InputStream is) {
+    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(is, "utf-8"))
+    String line = ""
+    StringBuilder stringBuilder = new StringBuilder()
+    while ((line = bufferedReader.readLine()) != null) {
+        stringBuilder.append(line)
+    }
+    return stringBuilder.toString().trim()
+}
+
+private static void executeIns(ins) {
+    def py = (ins).execute()
+    ByteArrayOutputStream result = new ByteArrayOutputStream()
+    def inputStream = py.getInputStream()
+    byte[] buffer = new byte[1024]
+    int length
+    while ((length = inputStream.read(buffer)) != -1) {
+        result.write(buffer, 0, length)
+    }
+    println(result.toString("UTF-8"))
+}
