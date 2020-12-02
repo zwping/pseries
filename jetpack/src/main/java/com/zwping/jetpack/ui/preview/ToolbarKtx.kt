@@ -1,5 +1,6 @@
 package com.zwping.jetpack.ui.preview
 
+import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Canvas
@@ -25,13 +26,29 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ActionProvider
 import androidx.core.view.MenuItemCompat
 import com.google.android.material.appbar.AppBarLayout
+import com.gyf.immersionbar.ImmersionBar
+import com.gyf.immersionbar.ktx.immersionBar
 import com.zwping.jetpack.R
 import com.zwping.jetpack.showToast
 
 /**
- * describe : 遵循Google原生开发, 对Toolbar进行功能扩展, 满足大部分产品要求
+ * describe : Toolbar扩展方法, 在不改变原有知识体系和代码的情况下, 切入项目(伪AOP)
+ *              遵循Google原生开发, 对Toolbar进行功能扩展, 满足大部分产品要求
  * author   : zwping @ 2020/10/26
  */
+/*
+原生暗指与产品的共识，了解AppBar，了解ActionBar和ToolBar
+
+Toolbar布局: [ navigationIcon - logoIcon - title/subTitle - (childView) - menuLayout ]
+官方文档: https://developer.android.com/reference/kotlin/androidx/appcompat/widget/Toolbar
+方法:
+    actionBar.setHomeButtonEnabled() 小于4.0版本的默认值为true的。但是在4.0及其以上是false
+                                    决定左上角的图标是否可以点击
+    actionBar.setDisplayHomeAsUpEnabled 给左上角图标的左边加上一个返回的图标 ActionBar.DISPLAY_HOME_AS_UP
+    actionBar.setDisplayShowHomeEnabled 左上角图标是否显示 对应id为android.R.id.home，对应ActionBar.DISPLAY_SHOW_HOME
+    actionBar.setDisplayShowCustomEnabled 自定义的普通View能在title栏显示 actionBar.setCustomView能起作用，对应ActionBar.DISPLAY_SHOW_CUSTOM
+    actionBar.setDisplayShowTitleEnabled  ActionBar.DISPLAY_SHOW_TITLE
+*/
 
 /**
  * 设置Toolbar居中的标题
@@ -40,7 +57,7 @@ import com.zwping.jetpack.showToast
  * @param title 标题
  * @return AppCompatTextView
  */
-inline fun Toolbar.setTitleOfCenter(title: CharSequence?): AppCompatTextView? {
+fun Toolbar.setTitleOfCenter(title: CharSequence?): AppCompatTextView? {
     setTitle("") // 置空默认标题
     contentInsetStartWithNavigation = 0
     return AppCompatTextView(context).also {
@@ -58,7 +75,7 @@ inline fun Toolbar.setTitleOfCenter(title: CharSequence?): AppCompatTextView? {
  *
  * @param title 标题 (注意其执行顺序, Toolbar内部动态addView)
  */
-inline fun Toolbar.setTitleCenter(title: CharSequence?) {
+fun Toolbar.setTitleCenter(title: CharSequence?) {
     setTitle(title)
     if (null == title) return
     contentInsetStartWithNavigation = 0
@@ -84,11 +101,11 @@ inline fun Toolbar.setTitleCenter(title: CharSequence?) {
  *                  不显示在界面上 MenuItem.SHOW_AS_ACTION_NEVER
  *                  如果有位置才显示, 不然就出现在右边的三个点中 MenuItem.SHOW_AS_ACTION_IF_ROOM
  */
-inline fun Toolbar.addMenu(itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, actionEnum: Int = MenuItem.SHOW_AS_ACTION_IF_ROOM) {
+fun Toolbar.addMenu(itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, actionEnum: Int = MenuItem.SHOW_AS_ACTION_IF_ROOM) {
     menu.addMenu(itemId, iconRes, title, actionEnum)
 }
 
-inline fun Menu.addMenu(itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, actionEnum: Int = MenuItem.SHOW_AS_ACTION_IF_ROOM) {
+fun Menu.addMenu(itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, actionEnum: Int = MenuItem.SHOW_AS_ACTION_IF_ROOM) {
     add(Menu.NONE, itemId, size(), title).setIcon(iconRes).setShowAsAction(actionEnum)
 }
 
@@ -97,11 +114,11 @@ inline fun Menu.addMenu(itemId: Int, @DrawableRes iconRes: Int, title: CharSeque
  *
  * @return [ActionProvider2]
  */
-inline fun Toolbar.addMenuBadge(itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, noinline menuItemClickListener: ((ActionProvider2) -> Unit)? = null): ActionProvider2? {
+fun Toolbar.addMenuBadge(itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, menuItemClickListener: ((ActionProvider2) -> Unit)? = null): ActionProvider2? {
     return menu.addMenuBadge(context, itemId, iconRes, title, menuItemClickListener)
 }
 
-inline fun Menu.addMenuBadge(ctx: Context?, itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, noinline menuItemClickListener: ((ActionProvider2) -> Unit)? = null): ActionProvider2? {
+fun Menu.addMenuBadge(ctx: Context?, itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, menuItemClickListener: ((ActionProvider2) -> Unit)? = null): ActionProvider2? {
     var provider: ActionProvider2?
     add(Menu.NONE, itemId, size(), title).setIcon(iconRes).also {
         provider = ActionProvider2(ctx, it).setOnMenuItemClickListener(menuItemClickListener)
@@ -115,7 +132,7 @@ inline fun Menu.addMenuBadge(ctx: Context?, itemId: Int, @DrawableRes iconRes: I
  *
  * @return [ActionProvider2]
  */
-inline fun Toolbar.getActionProvider2(itemId: Int): ActionProvider2? {
+fun Toolbar.getActionProvider2(itemId: Int): ActionProvider2? {
     return MenuItemCompat.getActionProvider(menu.findItem(itemId)) as ActionProvider2?
 }
 
@@ -123,7 +140,7 @@ inline fun Toolbar.getActionProvider2(itemId: Int): ActionProvider2? {
  * Toolbar支持状态栏的沉浸
  * @param appBarLayout toolbar + CollapsingToolbarLayout + AppBarLayout + CoordinatorLayout实现滑动toolbar渐变效果
  */
-inline fun Toolbar.setStatusBarImmersion(appBarLayout: AppBarLayout? = null) {
+fun Toolbar.setStatusBarImmersion(appBarLayout: AppBarLayout? = null) {
     var h = 0 // 状态栏高度
     try {
         val resourceId = Resources.getSystem().getIdentifier("status_bar_height", "dimen", "android")
