@@ -16,9 +16,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ac.md.ToolbarAc">
-
-        </activity>
+        <activity android:name=".ac.md.ToolbarAc" />
+        <activity android:name=".ac.md.ToolbarJAc" />
     </application>
 
 </manifest>

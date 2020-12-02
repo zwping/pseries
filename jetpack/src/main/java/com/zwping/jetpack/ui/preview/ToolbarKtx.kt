@@ -40,7 +40,7 @@ import com.zwping.jetpack.showToast
  * @param title 标题
  * @return AppCompatTextView
  */
-inline fun Toolbar.setTitleOfCenter(title: CharSequence?): AppCompatTextView {
+inline fun Toolbar.setTitleOfCenter(title: CharSequence?): AppCompatTextView? {
     setTitle("") // 置空默认标题
     contentInsetStartWithNavigation = 0
     return AppCompatTextView(context).also {
@@ -97,11 +97,11 @@ inline fun Menu.addMenu(itemId: Int, @DrawableRes iconRes: Int, title: CharSeque
  *
  * @return [ActionProvider2]
  */
-inline fun Toolbar.addMenuBadge(itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, noinline menuItemClickListener: ((ActionProvider2) -> Unit)? = null): ActionProvider2 {
+inline fun Toolbar.addMenuBadge(itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, noinline menuItemClickListener: ((ActionProvider2) -> Unit)? = null): ActionProvider2? {
     return menu.addMenuBadge(context, itemId, iconRes, title, menuItemClickListener)
 }
 
-inline fun Menu.addMenuBadge(ctx: Context?, itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, noinline menuItemClickListener: ((ActionProvider2) -> Unit)? = null): ActionProvider2 {
+inline fun Menu.addMenuBadge(ctx: Context?, itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, noinline menuItemClickListener: ((ActionProvider2) -> Unit)? = null): ActionProvider2? {
     var provider: ActionProvider2?
     add(Menu.NONE, itemId, size(), title).setIcon(iconRes).also {
         provider = ActionProvider2(ctx, it).setOnMenuItemClickListener(menuItemClickListener)
@@ -174,16 +174,32 @@ class ActionProvider2(context: Context?, item: MenuItem) : ActionProvider(contex
     var badgeView: BadgeTextView? = null
     var num: Int? = null
 
+    /**
+     * 设置角标数值
+     *
+     * @param num
+     */
     fun setBadgeNum(num: Int? = 0) {
         this.num = num
         badgeView?.visibility = if (null == num || 0 == num) View.INVISIBLE else View.VISIBLE
         badgeView?.text = "${if (null == num) 0 else if (num > 99) 99 else num.coerceAtLeast(1)}"
     }
 
+    /**
+     * 设置角标是否显示
+     *
+     * @param visible
+     */
     fun setBadgeVisible(visible: Boolean) {
-        badgeView?.visibility = if (visible) View.VISIBLE else View.GONE
+        badgeView?.visibility = if (visible) View.VISIBLE else View.INVISIBLE
     }
 
+    /**
+     * 设置menuItem点击事件
+     *
+     * @param lis
+     * @return [ActionProvider2]
+     */
     fun setOnMenuItemClickListener(lis: ((ActionProvider2) -> Unit)?): ActionProvider2 {
         ly.setOnClickListener { lis?.invoke(this) };return this
     }
@@ -215,4 +231,47 @@ class ActionProvider2(context: Context?, item: MenuItem) : ActionProvider(contex
     }
 
     override fun onCreateActionView(): View? = ly
+}
+
+/*** 兼容Java ***/
+object ToolbarKtx {
+    @JvmStatic
+    fun setTitleOfCenter(toolbar: Toolbar?, title: CharSequence?): AppCompatTextView? {
+        return toolbar?.setTitleOfCenter(title)
+    }
+
+    @JvmStatic
+    fun setTitleCenter(toolbar: Toolbar?, title: CharSequence?) {
+        toolbar?.setTitleCenter(title)
+    }
+
+    @JvmStatic
+    fun addMenu(toolbar: Toolbar?, itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, actionEnum: Int = MenuItem.SHOW_AS_ACTION_IF_ROOM) {
+        toolbar?.addMenu(itemId, iconRes, title, actionEnum)
+    }
+
+    @JvmStatic
+    fun addMenu(menu: Menu?, itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, actionEnum: Int = MenuItem.SHOW_AS_ACTION_IF_ROOM) {
+        menu?.addMenu(itemId, iconRes, title, actionEnum)
+    }
+
+    @JvmStatic
+    fun addMenuBadge(toolbar: Toolbar?, itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, menuItemClickListener: ((ActionProvider2) -> Unit)? = null): ActionProvider2? {
+        return toolbar?.addMenuBadge(itemId, iconRes, title, menuItemClickListener)
+    }
+
+    @JvmStatic
+    fun addMenuBadge(menu: Menu?, ctx: Context?, itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, menuItemClickListener: ((ActionProvider2) -> Unit)? = null): ActionProvider2? {
+        return menu?.addMenuBadge(ctx, itemId, iconRes, title, menuItemClickListener)
+    }
+
+    @JvmStatic
+    fun getActionProvider2(toolbar: Toolbar?, itemId: Int): ActionProvider2? {
+        return toolbar?.getActionProvider2(itemId)
+    }
+
+    @JvmStatic
+    fun setStatusBarImmersion(toolbar: Toolbar?, appBarLayout: AppBarLayout? = null) {
+        toolbar?.setStatusBarImmersion(appBarLayout)
+    }
 }

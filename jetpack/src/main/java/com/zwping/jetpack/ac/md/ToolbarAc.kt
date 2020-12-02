@@ -1,5 +1,6 @@
 package com.zwping.jetpack.ac.md
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -8,6 +9,7 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.MenuItemCompat
 import androidx.core.view.marginTop
@@ -39,7 +41,6 @@ class ToolbarAc : AppCompatActivity() {
     // 代码中实现自定义menu
     // 代码中实现menu小红点
     //
-    //
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,119 +57,7 @@ class ToolbarAc : AppCompatActivity() {
         tool_bar?.setNavigationOnClickListener { finish() }
 
         ly_container?.post {
-            ly_container?.also {
-                it.addView(
-                        Toolbar(this).apply {
-                            setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-                            setLogo(R.drawable.ic_baseline_android_24)
-                            title = "默认toolbar"
-                            subtitle = "副标题"
-                            addMenu(0x01, R.drawable.ic_baseline_android_24, "临时加")
-                            inflateMenu(R.menu.menu_tool_bar)
-
-                            setOnMenuItemClickListener { showToast("$it ${it.itemId}");true }
-                            setNavigationOnClickListener { showToast("$it") }
-                        })
-
-                it.addView(
-                        Toolbar(this).apply {
-                            title = "默认标题"
-
-                            setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-                        }
-                )
-
-                it.addView(
-                        Toolbar(this).apply {
-                            val tv = setTitleOfCenter("居中标题")
-//                        val tv = setTitleOfCenter("居中标题居中标题居中标题居中标题居中标题居中标题居中标题居中标题居中标题居中标题")
-
-                            setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-                        }
-                )
-
-                it.addView(
-                        Toolbar(this).apply {
-                            val tv = setTitleOfCenter("居中标题")
-
-                            setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-                            setLogo(R.drawable.ic_baseline_android_24)
-                            inflateMenu(R.menu.menu_tool_bar)
-                        }
-                )
-
-                it.addView(
-                        Toolbar(this).apply {
-                            setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-
-                            setTitleCenter("标题居中")
-//                        setTitleCenter("标题居中标题居中标题居中标题居中标题居中标题居中标题居中标题居中标题居中标题居中")
-
-                        }
-                )
-
-                it.addView(
-                        Toolbar(this).apply {
-                            setTitleCenter("标题居中")
-
-                            setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
-                            setLogo(R.drawable.ic_baseline_android_24)
-                            inflateMenu(R.menu.menu_tool_bar)
-                        }
-                )
-
-
-                it.addView(
-                        Toolbar(this).apply {
-                            title = "自定义menu"
-
-                            addMenu(0x01, R.drawable.ic_baseline_search_24, "menu1")
-                            addMenu(0x02, R.drawable.ic_baseline_search_24, "menu2")
-                            addMenu(0x03, R.drawable.ic_baseline_search_24, "menu3")
-                            addMenu(0x04, R.drawable.ic_baseline_search_24, "menu4")
-                            menu.findItem(0x01).icon.setTint(Color.RED)
-
-                            setOnMenuItemClickListener { showToast("$it ${it.itemId}");true }
-                        }
-                )
-
-                it.addView(
-                        Toolbar(this).apply {
-                            title = "自定义menu - 小红点"
-
-                            addMenuBadge(0x01, R.drawable.ic_baseline_search_24, "menu1") { showToast("${it.item?.itemId}--${it.num}") }
-                            addMenuBadge(0x02, R.drawable.ic_baseline_search_24, "menu2") { showToast("${it.item?.itemId}--${it.num}") }
-                            addMenuBadge(0x03, R.drawable.ic_baseline_search_24, "menu3") { showToast("${it.item?.itemId}--${it.num}") }
-                            menu.findItem(0x01).icon.setTint(Color.RED)
-
-                            getActionProvider2(0x01)?.setOnMenuItemClickListener { showToast("另外一处") }?.setBadgeNum(null)
-                            getActionProvider2(0x02)?.setBadgeNum(999)
-                            getActionProvider2(0x03)?.badgeView?.apply {
-                                val w = (5 * context.resources.displayMetrics.density).toInt()
-                                layoutParams = layoutParams.apply {
-                                    width = w;height = w
-                                }
-                                color = Color.GREEN
-                            }
-                            getActionProvider2(0x03)?.setBadgeVisible(true)
-
-                            setOnMenuItemClickListener { showToast("$it ${it.itemId}");true }
-                        }
-                )
-
-                it.addView(
-                        Toolbar(this).also {
-                            it.title = "底线 - 需外部实现..."
-                            it.setTitleTextColor(Color.GRAY)
-                        })
-
-
-                it.addView(
-                        View(this).apply {
-                            layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, 1500)
-                        }
-                )
-            }
+            initExample(ly_container)
         }
 
     }
@@ -179,5 +68,132 @@ class ToolbarAc : AppCompatActivity() {
         menu?.addMenu(0x03, R.drawable.ic_baseline_settings_24, "设置")
         // menuInflater.inflate(R.menu.menu_tool_bar, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    companion object {
+        @JvmStatic
+        fun initExample(container: ViewGroup?) {
+            val ctx by lazy { container!!.context }
+            container?.also {
+                it.addView(
+                        Toolbar(ctx).apply {
+                            setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
+                            setLogo(R.drawable.ic_baseline_android_24)
+                            title = "默认toolbar"
+                            subtitle = "副标题"
+                            addMenu(0x01, R.drawable.ic_baseline_android_24, "临时加")
+                            inflateMenu(R.menu.menu_tool_bar)
+
+                            setOnMenuItemClickListener { ctx.showToast("$it ${it.itemId}");true }
+                            setNavigationOnClickListener { ctx.showToast("$it") }
+                        })
+
+                it.addView(
+                        Toolbar(ctx).apply {
+                            title = "默认标题"
+
+                            setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
+                        }
+                )
+
+                it.addView(
+                        Toolbar(ctx).apply {
+                            val tv = setTitleOfCenter("居中标题")
+//                        val tv = setTitleOfCenter("居中标题居中标题居中标题居中标题居中标题居中标题居中标题居中标题居中标题居中标题")
+
+                            setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
+                        }
+                )
+
+                it.addView(
+                        Toolbar(ctx).apply {
+                            val tv = setTitleOfCenter("居中标题")
+
+                            setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
+                            setLogo(R.drawable.ic_baseline_android_24)
+                            inflateMenu(R.menu.menu_tool_bar)
+                        }
+                )
+
+                it.addView(
+                        Toolbar(ctx).apply {
+                            setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
+
+                            setTitleCenter("标题居中")
+//                        setTitleCenter("标题居中标题居中标题居中标题居中标题居中标题居中标题居中标题居中标题居中标题居中")
+
+                        }
+                )
+
+                it.addView(
+                        Toolbar(ctx).apply {
+                            setTitleCenter("标题居中")
+
+                            setNavigationIcon(R.drawable.ic_baseline_arrow_back_24)
+                            setLogo(R.drawable.ic_baseline_android_24)
+                            inflateMenu(R.menu.menu_tool_bar)
+                        }
+                )
+
+
+                it.addView(
+                        Toolbar(ctx).apply {
+                            title = "自定义menu"
+
+                            addMenu(0x01, R.drawable.ic_baseline_search_24, "menu1")
+                            addMenu(0x02, R.drawable.ic_baseline_search_24, "menu2")
+                            addMenu(0x03, R.drawable.ic_baseline_search_24, "menu3")
+                            addMenu(0x04, R.drawable.ic_baseline_search_24, "menu4")
+                            menu.findItem(0x01).icon.setTint(Color.RED)
+
+                            setOnMenuItemClickListener { ctx.showToast("$it ${it.itemId}");true }
+                        }
+                )
+
+                it.addView(
+                        Toolbar(ctx).apply {
+                            title = "自定义menu - 小红点"
+
+                            addMenuBadge(0x01, R.drawable.ic_baseline_search_24, "menu1") { ctx.showToast("${it.item?.itemId}--${it.num}") }
+                            addMenuBadge(0x02, R.drawable.ic_baseline_search_24, "menu2") { ctx.showToast("${it.item?.itemId}--${it.num}") }
+                            addMenuBadge(0x03, R.drawable.ic_baseline_search_24, "menu3") { ctx.showToast("${it.item?.itemId}--${it.num}") }
+                            menu.findItem(0x01).icon.setTint(Color.RED)
+
+                            getActionProvider2(0x01)?.setOnMenuItemClickListener { ctx.showToast("另外一处") }?.setBadgeNum(null)
+                            getActionProvider2(0x02)?.setBadgeNum(999)
+                            getActionProvider2(0x03)?.badgeView?.apply {
+                                val w = (5 * context.resources.displayMetrics.density).toInt()
+                                layoutParams = layoutParams.apply {
+                                    width = w;height = w
+                                }
+                                color = Color.GREEN
+                            }
+                            getActionProvider2(0x03)?.setBadgeVisible(true)
+
+                            setOnMenuItemClickListener { ctx.showToast("$it ${it.itemId}");true }
+                        }
+                )
+
+                it.addView(
+                        Toolbar(ctx).also {
+                            it.title = "底线 - 需外部实现..."
+                            it.setTitleTextColor(Color.GRAY)
+                        })
+
+                it.addView(
+                        AppCompatTextView(ctx).also {
+                            it.text = "Java使用toolbar ktx"
+                            it.setOnClickListener { ctx.startActivity(Intent(ctx, ToolbarJAc::class.java)) }
+                        }
+                )
+
+
+                it.addView(
+                        View(ctx).apply {
+                            layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, 1500)
+                        }
+                )
+            }
+        }
     }
 }
