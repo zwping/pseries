@@ -92,22 +92,31 @@ inline fun Menu.addMenu(itemId: Int, @DrawableRes iconRes: Int, title: CharSeque
     add(Menu.NONE, itemId, size(), title).setIcon(iconRes).setShowAsAction(actionEnum)
 }
 
-/*** 快捷增加带角标的menu ***/
-inline fun Toolbar.addMenuBadge(itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, noinline menuItemClickListener: ((CActionProvider) -> Unit)? = null): CActionProvider {
+/**
+ * 快捷增加带角标的menu
+ *
+ * @return [ActionProvider2]
+ */
+inline fun Toolbar.addMenuBadge(itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, noinline menuItemClickListener: ((ActionProvider2) -> Unit)? = null): ActionProvider2 {
     return menu.addMenuBadge(context, itemId, iconRes, title, menuItemClickListener)
 }
 
-inline fun Menu.addMenuBadge(ctx: Context?, itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, noinline menuItemClickListener: ((CActionProvider) -> Unit)? = null): CActionProvider {
-    var provider: CActionProvider?
+inline fun Menu.addMenuBadge(ctx: Context?, itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, noinline menuItemClickListener: ((ActionProvider2) -> Unit)? = null): ActionProvider2 {
+    var provider: ActionProvider2?
     add(Menu.NONE, itemId, size(), title).setIcon(iconRes).also {
-        provider = CActionProvider(ctx, it).setOnMenuItemClickListener(menuItemClickListener)
+        provider = ActionProvider2(ctx, it).setOnMenuItemClickListener(menuItemClickListener)
         MenuItemCompat.setActionProvider(it, provider)
     }.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
     return provider!!
 }
 
-inline fun Toolbar.getActionProviderOfC(itemId: Int): CActionProvider? {
-    return MenuItemCompat.getActionProvider(menu.findItem(itemId)) as CActionProvider?
+/**
+ * 获取带角标的ActionProvider2
+ *
+ * @return [ActionProvider2]
+ */
+inline fun Toolbar.getActionProvider2(itemId: Int): ActionProvider2? {
+    return MenuItemCompat.getActionProvider(menu.findItem(itemId)) as ActionProvider2?
 }
 
 /**
@@ -147,7 +156,7 @@ inline fun Toolbar.setStatusBarImmersion(appBarLayout: AppBarLayout? = null) {
 /*** 圆形背景TextView ***/
 class BadgeTextView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : AppCompatTextView(context, attrs, defStyleAttr) {
 
-    var color: Int = Color.RED
+    var color: Int = Color.RED // 默认小红点
 
     private val paint by lazy { Paint() }
     override fun onDraw(canvas: Canvas?) {
@@ -158,7 +167,7 @@ class BadgeTextView @JvmOverloads constructor(context: Context, attrs: Attribute
 }
 
 /*** 自定义携带角标的ActionProvider ***/
-class CActionProvider(context: Context?, item: MenuItem) : ActionProvider(context) {
+class ActionProvider2(context: Context?, item: MenuItem) : ActionProvider(context) {
 
     var item: MenuItem? = null
     var iconView: AppCompatImageView? = null
@@ -175,7 +184,7 @@ class CActionProvider(context: Context?, item: MenuItem) : ActionProvider(contex
         badgeView?.visibility = if (visible) View.VISIBLE else View.GONE
     }
 
-    fun setOnMenuItemClickListener(lis: ((CActionProvider) -> Unit)?): CActionProvider {
+    fun setOnMenuItemClickListener(lis: ((ActionProvider2) -> Unit)?): ActionProvider2 {
         ly.setOnClickListener { lis?.invoke(this) };return this
     }
 

@@ -141,16 +141,16 @@ class ToolbarAc : AppCompatActivity() {
                             addMenuBadge(0x03, R.drawable.ic_baseline_search_24, "menu3") { showToast("${it.item?.itemId}--${it.num}") }
                             menu.findItem(0x01).icon.setTint(Color.RED)
 
-                            getActionProviderOfC(0x01)?.setOnMenuItemClickListener { showToast("另外一处") }?.setBadgeNum(null)
-                            getActionProviderOfC(0x02)?.setBadgeNum(999)
-                            getActionProviderOfC(0x03)?.badgeView?.apply {
+                            getActionProvider2(0x01)?.setOnMenuItemClickListener { showToast("另外一处") }?.setBadgeNum(null)
+                            getActionProvider2(0x02)?.setBadgeNum(999)
+                            getActionProvider2(0x03)?.badgeView?.apply {
                                 val w = (5 * context.resources.displayMetrics.density).toInt()
                                 layoutParams = layoutParams.apply {
                                     width = w;height = w
                                 }
                                 color = Color.GREEN
                             }
-                            getActionProviderOfC(0x03)?.setBadgeVisible(true)
+                            getActionProvider2(0x03)?.setBadgeVisible(true)
 
                             setOnMenuItemClickListener { showToast("$it ${it.itemId}");true }
                         }
