@@ -2,23 +2,16 @@ package com.zwping.jetpack.ac.md
 
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.*
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.MenuItemCompat
-import androidx.core.view.marginTop
-import com.google.android.material.appbar.AppBarLayout
-import com.gyf.immersionbar.ImmersionBar
 import com.gyf.immersionbar.ktx.immersionBar
 import com.zwping.jetpack.R
-import com.zwping.jetpack.showToast
-import com.zwping.jetpack.ui.preview.*
+import com.zwping.jetpack.ktxs.*
+import com.zwping.jetpack.ktxs.showToast
 import kotlinx.android.synthetic.main.ac_tool_bar.*
 
 /**
@@ -50,7 +43,7 @@ class ToolbarAc : AppCompatActivity() {
         setSupportActionBar(tool_bar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        tool_bar?.setStatusBarImmersion(ly_app_bar)
+        tool_bar?.setStatusBarImmersion()
         // tool_bar?.addMenu(0x01,R.drawable.ic_baseline_android_24,"临时加")
         // tool_bar?.inflateMenu(R.menu.menu_tool_bar)
         tool_bar?.setOnMenuItemClickListener { showToast("$it ${it.itemId}"); true }

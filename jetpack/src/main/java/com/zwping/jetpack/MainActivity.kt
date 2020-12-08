@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.lifecycle.DefaultLifecycleObserver
 import com.zwping.jetpack.ac.md.ToolbarAc
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -13,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        startActivity(Intent(this, ToolbarAc::class.java))
+        startActivity(Intent(this, ViewModelAc::class.java).apply { putExtra("ids","value1") })
         btn_toolbar?.setOnClickListener {
             startActivity(Intent(this, ToolbarAc::class.java))
         }
@@ -23,5 +24,9 @@ class MainActivity : AppCompatActivity() {
         btn_broadcast?.setOnClickListener {
 
         }
+
+        lifecycle.addObserver(object: DefaultLifecycleObserver{
+
+        })
     }
 }

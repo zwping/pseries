@@ -1,11 +1,9 @@
-package com.zwping.jetpack
+package com.zwping.jetpack.ktxs
 
 import android.content.Context
 import android.view.View
 import android.widget.Checkable
 import android.widget.Toast
-import androidx.annotation.ColorInt
-import androidx.core.content.ContextCompat
 
 //<editor-fold desc="View扩展">
 

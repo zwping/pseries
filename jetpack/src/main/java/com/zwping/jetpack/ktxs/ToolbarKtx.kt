@@ -1,6 +1,5 @@
-package com.zwping.jetpack.ui.preview
+package com.zwping.jetpack.ktxs
 
-import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Canvas
@@ -14,22 +13,14 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
 import android.widget.ImageView
-import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.Toolbar
-import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat
 import androidx.core.view.ActionProvider
 import androidx.core.view.MenuItemCompat
-import com.google.android.material.appbar.AppBarLayout
-import com.gyf.immersionbar.ImmersionBar
-import com.gyf.immersionbar.ktx.immersionBar
-import com.zwping.jetpack.R
-import com.zwping.jetpack.showToast
 
 /**
  * describe : Toolbar扩展方法, 在不改变原有知识体系和代码的情况下, 切入项目(伪AOP)
@@ -137,10 +128,9 @@ fun Toolbar.getActionProvider2(itemId: Int): ActionProvider2? {
 }
 
 /**
- * Toolbar支持状态栏的沉浸
- * @param appBarLayout toolbar + CollapsingToolbarLayout + AppBarLayout + CoordinatorLayout实现滑动toolbar渐变效果
+ * Toolbar支持状态栏的沉浸, Toolbar动态marginTop
  */
-fun Toolbar.setStatusBarImmersion(appBarLayout: AppBarLayout? = null) {
+fun Toolbar.setStatusBarImmersion() {
     var h = 0 // 状态栏高度
     try {
         val resourceId = Resources.getSystem().getIdentifier("status_bar_height", "dimen", "android")
@@ -160,9 +150,6 @@ fun Toolbar.setStatusBarImmersion(appBarLayout: AppBarLayout? = null) {
     } catch (ignored: Resources.NotFoundException) {
     }
     if (0 == h) return
-    appBarLayout?.apply {
-        layoutParams = layoutParams.apply { height += h }
-    }
     layoutParams = layoutParams.apply {
         (layoutParams as ViewGroup.MarginLayoutParams).topMargin = h // setMarginTop = 状态栏高度
     }
@@ -288,7 +275,7 @@ object ToolbarKtx {
     }
 
     @JvmStatic
-    fun setStatusBarImmersion(toolbar: Toolbar?, appBarLayout: AppBarLayout? = null) {
-        toolbar?.setStatusBarImmersion(appBarLayout)
+    fun setStatusBarImmersion(toolbar: Toolbar?) {
+        toolbar?.setStatusBarImmersion()
     }
 }

@@ -3,24 +3,19 @@ package com.zwping.jetpack.ac.md;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.gyf.immersionbar.ImmersionBar;
 import com.zwping.jetpack.R;
 import com.zwping.jetpack.databinding.AcToolBarBinding;
-import com.zwping.jetpack.ui.preview.ToolbarKtx;
-import com.zwping.jetpack.ui.preview.ToolbarKtxKt;
+import com.zwping.jetpack.ktxs.ToolbarKtx;
 
 /**
- * <pre>
- * describe :
- * author   : zwping @ 2020/12/2
- * </pre>
+ *
+ * zwping @ 2020/12/2
  */
 public class ToolbarJAc extends AppCompatActivity {
 
@@ -37,7 +32,7 @@ public class ToolbarJAc extends AppCompatActivity {
         setSupportActionBar(viewBinding.toolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ToolbarKtx.setStatusBarImmersion(viewBinding.toolBar, viewBinding.lyAppBar);
+        ToolbarKtx.setStatusBarImmersion(viewBinding.toolBar);
         viewBinding.toolBar.setOnMenuItemClickListener(item -> {
             showToast(item.toString() + item.getItemId());
             return false;
