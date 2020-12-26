@@ -1,9 +1,8 @@
-## 维护一份AOP思路的ktx文件
+## 维护一份AOP思路的ktx框架
 
-> AOP: 面向切面编程, 在不改变原有代码同时改变代码执行结果
-> 面向学不赢的场景时, 无数大佬的特色框架推出, 这类框架当时使用确实方便, 但其特色各异架构远景不长, 算是饮鸩止渴
-> 面向多端开发, 过多特色的框架导致review成本庞大
-> 遵循Google原生开发, 遵循原生特色; code成本大, 但二次迭代/review成本降低
+> 没有任何基类/组件, 单ktx文件, 复制即用
+> 插件式依赖, 随时升级或抛弃
+> 遵循Google原生开发, 遵循原生特色
 > kotlin扩展函数/参数给予了安卓非反射实现AOP功能
 
 
@@ -25,14 +24,22 @@ T.setStatusBarImmersion() // Toolbar动态marginTop
 object ToolbarKtx(){....} // 兼容Java
 ```
 
-### DiffUtilKtx<B>
 
-> Demo >>> DiffUtil.test
+### 小彩蛋
 
 ```kotlin
 class DiffUtilKtx<B>(...) {
     var oldData : List<B>? // 老数据/当前数据
     fun calculateDiff(data, detectMoves) // 类对象管理oldData
     fun setOnDataDiffListener(lis) // 监听数据是否产生差异 (DiffUtil差量算法)
+}
+```
+
+```kotlin
+/*** 具有生命周期感知的定时器 ***/
+class TimerKtx(...){
+    var count           // 执行次数
+    fun schedule(...)   // 执行
+    fun cancel()        // 取消
 }
 ```

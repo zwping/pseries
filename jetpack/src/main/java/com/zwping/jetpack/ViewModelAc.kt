@@ -2,7 +2,6 @@ package com.zwping.jetpack
 
 import android.os.Bundle
 import android.os.Handler
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import kotlinx.android.synthetic.main.ac_view_model.*
@@ -23,8 +22,8 @@ class ViewModelAc : AppCompatActivity() {
         var id = MutableLiveData<String>()
     }
 
-    private val vm by lazy { viewModels<VM>().value }
-    private val vm1 by lazy { viewModels<VM1>().value }
+    private val vm by lazy { ViewModelProvider(this).get(VM::class.java) }
+    private val vm1 by lazy { ViewModelProvider(this).get(VM1::class.java) }
     private var ids = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -11,7 +11,7 @@ class DiffUtil {
 
     @Test
     fun classObjectMgDiffUtil() {
-        val d = DiffUtilKtx<Bean>(
+        val d = IDiffUtil<Bean>(
                 { oldData, newData ->
                     oldData?.id == newData?.id
                 },

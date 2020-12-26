@@ -14,7 +14,6 @@ import com.zwping.jetpack.databinding.AcToolBarBinding;
 import com.zwping.jetpack.ktxs.ToolbarKtx;
 
 /**
- *
  * zwping @ 2020/12/2
  */
 public class ToolbarJAc extends AppCompatActivity {

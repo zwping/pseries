@@ -7,34 +7,9 @@
     tools:context=".MainActivity">
 
     <LinearLayout
+        android:id="@+id/ly_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/btn_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left|center_vertical"
-            android:text="Toolbar"
-            android:textAllCaps="false" />
-
-        <Button
-            android:id="@+id/btn_activity_result"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left|center_vertical"
-            android:text="Activity Result"
-            android:textAllCaps="false" />
-
-        <Button
-            android:id="@+id/btn_broadcast"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="left|center_vertical"
-            android:text="Broadcast Receiver"
-            android:textAllCaps="false" />
-
-    </LinearLayout>
+        android:orientation="vertical" />
 
 </androidx.core.widget.NestedScrollView>

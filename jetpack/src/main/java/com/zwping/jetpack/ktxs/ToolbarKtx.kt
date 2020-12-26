@@ -23,16 +23,21 @@ import androidx.core.view.ActionProvider
 import androidx.core.view.MenuItemCompat
 
 /**
- * describe : Toolbar扩展方法, 在不改变原有知识体系和代码的情况下, 切入项目(伪AOP)
- *              遵循Google原生开发, 对Toolbar进行功能扩展, 满足大部分产品要求
- * author   : zwping @ 2020/10/26
+ * Toolbar扩展
+ *
+ * zwping @ 2020/10/26
  */
 /*
-原生暗指与产品的共识，了解AppBar，了解ActionBar和ToolBar
-
 Toolbar布局: [ navigationIcon - logoIcon - title/subTitle - (childView) - menuLayout ]
 官方文档: https://developer.android.com/reference/kotlin/androidx/appcompat/widget/Toolbar
 方法:
+    setTitleOfCenter(...) 设置Toolbar居中的标题
+    setTitleCenter(...) 设置Toolbar标题居中
+    addMenu(...)    快捷增加menu
+    addMenuBadge(...)   快捷增加带角标的menu
+    getActionProvider2(...)     获取带角标的ActionProvider2
+    setStatusBarImmersion()     Toolbar支持状态栏的沉浸
+
     actionBar.setHomeButtonEnabled() 小于4.0版本的默认值为true的。但是在4.0及其以上是false
                                     决定左上角的图标是否可以点击
     actionBar.setDisplayHomeAsUpEnabled 给左上角图标的左边加上一个返回的图标 ActionBar.DISPLAY_HOME_AS_UP

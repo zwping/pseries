@@ -3,22 +3,25 @@ package com.zwping.jetpack.ktxs
 import androidx.recyclerview.widget.DiffUtil
 
 /**
- * DiffUtil封装
+ * DiffUtil封装扩展
  * - 类对象管理oldData
  * - 监听data数据是否已产生差异 (DiffUtil差量算法)
  * zwping @ 12/3/20
+ *
+ * public class [IDiffUtil]
+ *  class method [calculateDiff] [setOnDataDiffListener]
  *
  * @param areItemsTheSame
  * @param areContentsTheSame
  * @param getChangePayload
  */
-class DiffUtilKtx<B>(
+class IDiffUtil<B>(
         private val areItemsTheSame: (oldData: B?, newData: B?) -> Boolean?,
         private val areContentsTheSame: (oldData: B?, newData: B?) -> Boolean?,
         private val getChangePayload: ((oldData: B?, newData: B?) -> Any?)? = null
 ) {
 
-    public var oldData: List<B>? = null // 老数据/当前数据
+    var oldData: List<B>? = null // 老数据/当前数据
     private var dataDiffListener: ((List<B>?) -> Unit)? = null
 
 
@@ -33,9 +36,11 @@ class DiffUtilKtx<B>(
      * 监听data数据是否已产生差异
      * 借助DiffUtil差量算法实现List高效比对
      */
-    fun setOnDataDiffListener(lis: (List<B>?) -> Unit): DiffUtilKtx<B> {
+    fun setOnDataDiffListener(lis: (List<B>?) -> Unit): IDiffUtil<B> {
         this.dataDiffListener = lis;return this
     }
+
+    /* ------------------------------ */
 
     /**
      * DiffUtil Callback 封装
