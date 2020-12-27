@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
+import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
@@ -22,39 +24,46 @@ import kotlinx.android.synthetic.main.activity_main.*
  */
 class DiffUtilAc : AppCompatActivity(R.layout.activity_main) {
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ly_container?.also {
-            it.addView(AppCompatTextView(this).apply { text = "列表差量刷新" })
-
-            val rv = RecyclerView(this).apply {
-                layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT)
-            }
+            val tv = AppCompatTextView(this).apply { text = "列表差量刷新" }
+            it.addView(tv)
+            val rv = RecyclerView(this)
             it.addView(rv)
-            val adapter = object : BaseBindingAdapter<String, ItemTestBinding>() {
-                override fun createViewBinding(inflater: LayoutInflater, parent: ViewGroup): ItemTestBinding {
-                    return ItemTestBinding.inflate(inflater, parent, false)
+            val adapter = rv.builder(object : BaseBindingExtraAdapter<String, ItemTestBinding>({ inflater, parent -> ItemTestBinding.inflate(inflater, parent, false) }) {
+                override fun convert2(h: VBViewHolder<ItemTestBinding>, b: String) {
+                    h.vb.tvTitle.text = "$b"
                 }
+            }) {
+                removeFocus()
+                // setGridLayoutManager(3)
 
-                override fun convert(holder: BaseViewHolder, vb: ItemTestBinding, item: String) {
-                    // holder.setText(R.id.tv_title,item)
-                    vb.tvTitle.text = "$item"
-                }
+                it.setDiffCallback2({ od, nd -> od == nd })
+                it.loadMoreModule.setOnLoadMoreListener { println("loadMore ") }
+                // it.emptyLayout = FrameLayout(this)
             }
-            rv.setLinearLayoutManager()
-            rv.adapter = adapter
+
+            it.addView(AppCompatTextView(this).apply { text = "数据产生差异" })
+            val tv1 = AppCompatTextView(this)
+            it.addView(tv1)
+            var size = 0
+            val diff = IDiffUtil<Int>({ od, nd -> od == nd }).setOnDataDiffListener { tv1.text = "$it 发生了变化, 次数${++size}" }
 
             ITimer({
-//                runOnUiThread {
-                    adapter.setNewInstance(mutableListOf<String>().apply {
-                        for (i in 0 until 10) {
-                            add("${(0..i).random()}")
-                        }
-                    })
-//                }
-                println(adapter.data)
-            }, 0, 2000).schedule(this)
+                adapter.setDiffNewData(mutableListOf<String>().apply {
+                    for (i in 0 until 5) {
+                        add("${(0..i).random()}")
+                    }
+                })
+                tv.text = "列表差量刷新, 次数${it.count}"
+
+                diff.calculateDiff(mutableListOf<Int>().apply {
+                    for (i in 0 until 1) {
+                        add((0..1).random())
+                    }
+                })
+            }, 0, 3000).schedule(this)
         }
 
 

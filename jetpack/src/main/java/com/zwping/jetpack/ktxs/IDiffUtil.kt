@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.DiffUtil
  * @param getChangePayload
  */
 class IDiffUtil<B>(
-        private val areItemsTheSame: (oldData: B?, newData: B?) -> Boolean?,
-        private val areContentsTheSame: (oldData: B?, newData: B?) -> Boolean?,
-        private val getChangePayload: ((oldData: B?, newData: B?) -> Any?)? = null
+        private val areItemsTheSame: (od: B?, nd: B?) -> Boolean,
+        private val areContentsTheSame: (od: B?, nd: B?) -> Boolean = { _, _ -> true },
+        private val getChangePayload: ((od: B?, nd: B?) -> Any?)? = { _, _ -> null }
 ) {
 
     var oldData: List<B>? = null // 老数据/当前数据
@@ -27,7 +27,7 @@ class IDiffUtil<B>(
 
     /*** 类对象管理oldData ***/
     fun calculateDiff(data: List<B>?, detectMoves: Boolean = true): DiffUtil.DiffResult {
-        println("需要论证类对象管理oldData中oldData和data深拷贝问题: $oldData $data")
+        // println("需要论证类对象管理oldData中oldData和data深拷贝问题: $oldData $data")
         val result = Callback(oldData, data, { this.oldData = it; dataDiffListener?.invoke(it) }, areItemsTheSame, areContentsTheSame, getChangePayload)
         return DiffUtil.calculateDiff(result, detectMoves)
     }

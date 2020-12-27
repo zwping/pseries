@@ -42,7 +42,7 @@ class ITimer(private val action: (ITimer) -> Unit, private val delay: Long, priv
         count = 0
         initTimer()
         autoDisposable(owner, lifecycle)
-        if (0L == period) timer?.schedule(task, delay)
+        if (0L == period) timer?.schedule(task, delay) // 单次计划执行
         else timer?.schedule(task, delay, period)
         return this
     }
