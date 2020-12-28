@@ -2,16 +2,14 @@ package com.zwping.jetpack.ac.md
 
 import android.graphics.Color
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
-import com.chad.library.adapter.base.viewholder.BaseViewHolder
+import com.scwang.smart.refresh.footer.ClassicsFooter
+import com.scwang.smart.refresh.header.ClassicsHeader
+import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.zwping.jetpack.R
 import com.zwping.jetpack.databinding.ItemTestBinding
 import com.zwping.jetpack.ktxs.*
@@ -26,36 +24,79 @@ class DiffUtilAc : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ly_container?.also {
-            val tv = AppCompatTextView(this).apply { text = "列表差量刷新" }
-            it.addView(tv)
-            val rv = RecyclerView(this)
-            it.addView(rv)
-            val adapter = rv.builder(object : BaseBindingExtraAdapter<String, ItemTestBinding>({ inflater, parent -> ItemTestBinding.inflate(inflater, parent, false) }) {
-                override fun convert2(h: VBViewHolder<ItemTestBinding>, b: String) {
-                    h.vb.tvTitle.text = "$b"
-                }
-            }) {
-                removeFocus()
-                // setGridLayoutManager(3)
 
-                it.setDiffCallback2({ od, nd -> od == nd })
-                it.loadMoreModule.setOnLoadMoreListener { println("loadMore ") }
-                // it.emptyLayout = FrameLayout(this)
-            }
-
+        ly_container?.also { it ->
             it.addView(AppCompatTextView(this).apply { text = "数据产生差异" })
             val tv1 = AppCompatTextView(this)
             it.addView(tv1)
             var size = 0
             val diff = IDiffUtil<Int>({ od, nd -> od == nd }).setOnDataDiffListener { tv1.text = "$it 发生了变化, 次数${++size}" }
 
+
+            val tv = AppCompatTextView(this).apply { text = "列表差量刷新" }
+            it.addView(tv)
+            val refreshLayout = SmartRefreshLayout(this).apply {
+            }
+            refreshLayout.setRefreshHeader(ClassicsHeader(this))
+            refreshLayout.setRefreshFooter(ClassicsFooter(this))
+            val rv = RecyclerView(this).apply {
+                layoutParams = ViewGroup.LayoutParams(MATCH_PARENT, 600)
+                setBackgroundColor(Color.parseColor("#666666"))
+            }
+            refreshLayout.addView(rv)
+            it.addView(refreshLayout)
+
+            val adapter = rv.builder(object : BaseBindingExtraAdapter<String, ItemTestBinding>({ inflater, parent -> ItemTestBinding.inflate(inflater, parent, false) }) {
+                override fun convert(holder: VBViewHolder<ItemTestBinding>, item: String) {
+                    holder.vb.tvTitle.text = "$item"
+                }
+            }) {
+                removeFocus()
+                // setGridLayoutManager(3)
+
+                it.pagination.pageSize = 40
+                it.setDiffCallback2({ od, nd -> od == nd })
+                // it.emptyLayout = FrameLayout(this)
+            }
+
+
+            val pag = Pagination(3)
+            refreshLayout.setOnRefreshListener {
+                mockData(adapter.pagination.nextPage(true), adapter.pagination.pageSize,
+                        {
+                            adapter.setDataSuc(it, true, refreshLayout, pag)
+                        },
+                        {
+                            adapter.setDataErr(true, refreshLayout)
+                        })
+
+            }
+            refreshLayout.setOnLoadMoreListener {
+                mockData(adapter.pagination.nextPage(false), adapter.pagination.pageSize,
+                        {
+                            adapter.setDataSuc(it, false, refreshLayout, pag)
+                        },
+                        {
+                            adapter.setDataErr(false, refreshLayout)
+                        })
+            }
+
+            adapter.loadMoreModule.setOnLoadMoreListener {
+                mockData(adapter.pagination.nextPage(false), adapter.pagination.pageSize,
+                        {
+                            adapter.setDataSuc(it, false, refreshLayout, pag)
+                        },
+                        { adapter.setDataErr(false, refreshLayout) })
+            }
+
+            refreshLayout.autoRefresh(500)
+
             ITimer({
-                adapter.setDiffNewData(mutableListOf<String>().apply {
+                adapter.setDataSuc(mutableListOf<String>().apply {
                     for (i in 0 until 5) {
                         add("${(0..i).random()}")
                     }
-                })
+                }, true, refreshLayout)
                 tv.text = "列表差量刷新, 次数${it.count}"
 
                 diff.calculateDiff(mutableListOf<Int>().apply {
@@ -63,6 +104,7 @@ class DiffUtilAc : AppCompatActivity(R.layout.activity_main) {
                         add((0..1).random())
                     }
                 })
+//                it.cancel()
             }, 0, 3000).schedule(this)
         }
 
@@ -77,7 +119,7 @@ class DiffUtilAc : AppCompatActivity(R.layout.activity_main) {
             LiveDataBus.TestBus.data = i
             ++i
         }, 0, 1000).schedule(this, 2)
-        t.cancel()
+        // t.cancel()
 
     }
 
@@ -85,4 +127,18 @@ class DiffUtilAc : AppCompatActivity(R.layout.activity_main) {
         var i = 0
     }
 
+
+    private fun mockData(pageIndex: Int, pageSize: Int, lis: (MutableList<String>) -> Unit, lisErr: () -> Unit) {
+        ITimer({
+            var data = mutableListOf<String>().apply {
+                for (i1 in (pageIndex - 1) * pageSize until pageSize * pageIndex) add("$i1")
+            }
+//             if (pageIndex != 1) data.removeAt(0)
+//             if (pageIndex != 1) data.clear()
+            lis.invoke(data)
+//            lisErr.invoke()
+//            if (pageIndex == 1) lis.invoke(data)
+//             else lisErr.invoke()
+        }, 1000).schedule(this)
+    }
 }

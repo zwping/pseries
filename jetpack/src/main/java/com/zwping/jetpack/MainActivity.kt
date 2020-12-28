@@ -33,11 +33,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             // it.addView(cb().apply { text = "Broadcast Receiver";setOnDebounceClickListener { } })
             it.addView(cb().apply { text = "ARouter";setOnDebounceClickListener { } })
             it.addView(cb().apply { text = "ViewPager2";setOnDebounceClickListener { } })
-            it.addView(cb().apply { text = "ViewModel";setOnDebounceClickListener { } })
+            // it.addView(cb().apply { text = "ViewModel";setOnDebounceClickListener { } })
             it.addView(cb().apply { text = "Retrofit";setOnDebounceClickListener { } })
             it.addView(cb().apply { text = "Store";setOnDebounceClickListener { } })
             it.addView(cb().apply { text = "Room";setOnDebounceClickListener { } })
-            it.addView(cb().apply { text = "Paging3";setOnDebounceClickListener { } })
+            // it.addView(cb().apply { text = "Paging3";setOnDebounceClickListener { } })
             it.addView(cb().apply { text = "Fragment";setOnDebounceClickListener { } })
             it.addView(cb().apply { text = "Coroutines";setOnDebounceClickListener { } })
         }
