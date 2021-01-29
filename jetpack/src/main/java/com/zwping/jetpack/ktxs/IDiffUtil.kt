@@ -4,12 +4,9 @@ import androidx.recyclerview.widget.DiffUtil
 
 /**
  * DiffUtil封装扩展
- * - 类对象管理oldData
- * - 监听data数据是否已产生差异 (DiffUtil差量算法)
- * zwping @ 12/3/20
+ *  -[IDiffUtil]类对象管理oldData, 包含计算差异[calculateDiff]/监听data数据是否已产生差异[setOnDataDiffListener]
  *
- * public class [IDiffUtil]
- *  class method [calculateDiff] [setOnDataDiffListener]
+ * zwping @ 12/3/20
  *
  * @param areItemsTheSame
  * @param areContentsTheSame
@@ -21,22 +18,22 @@ class IDiffUtil<B>(
         private val getChangePayload: ((od: B?, nd: B?) -> Any?)? = { _, _ -> null }
 ) {
 
-    var oldData: List<B>? = null // 老数据/当前数据
-    private var dataDiffListener: ((List<B>?) -> Unit)? = null
+    var oldData: List<B>? = null // 老数据
+    private var dataDiffListener: (IDiffUtil<B>.(List<B>?) -> Unit)? = null
 
 
     /*** 类对象管理oldData ***/
     fun calculateDiff(data: List<B>?, detectMoves: Boolean = true): DiffUtil.DiffResult {
         // println("需要论证类对象管理oldData中oldData和data深拷贝问题: $oldData $data")
-        val result = Callback(oldData, data, { this.oldData = it; dataDiffListener?.invoke(it) }, areItemsTheSame, areContentsTheSame, getChangePayload)
+        val result = Callback(oldData, data, { dataDiffListener?.invoke(this, it);this.oldData = it }, areItemsTheSame, areContentsTheSame, getChangePayload)
         return DiffUtil.calculateDiff(result, detectMoves)
     }
 
     /**
      * 监听data数据是否已产生差异
-     * 借助DiffUtil差量算法实现List高效比对
+     * 借助(DiffUtil差量算法)实现List高效比对
      */
-    fun setOnDataDiffListener(lis: (List<B>?) -> Unit): IDiffUtil<B> {
+    fun setOnDataDiffListener(lis: IDiffUtil<B>.(List<B>?) -> Unit): IDiffUtil<B> {
         this.dataDiffListener = lis;return this
     }
 

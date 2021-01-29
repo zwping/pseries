@@ -1,13 +1,17 @@
 package com.zwping.jetpack.ktxs
 
-import android.content.Context
 import android.view.View
+import android.view.animation.Animation
+import android.view.animation.OvershootInterpolator
+import android.view.animation.TranslateAnimation
 import android.widget.Checkable
-import android.widget.Toast
 
-//<editor-fold desc="View扩展">
-
-/** View防抖点击 */
+/**
+ *
+ * zwping @ 1/11/21
+ *
+ * View防抖点击
+ */
 inline fun <V : View> V.setOnDebounceClickListener(time: Long = 500L, crossinline lambda: (V) -> Unit) {
     var lastTime = 0L
     setOnClickListener {
@@ -35,22 +39,12 @@ inline fun <V : View> V.setOnDoubleClickListener(
     }
 }
 
-//</editor-fold>
-
-
-/*** Toast ***/
-fun Context?.showToast(msg: CharSequence, duration: Int = Toast.LENGTH_SHORT) {
-    Toast.makeText(this, msg, duration).show()
+/*** 左右抖动 ***/
+inline fun View.shakelr() {
+    val animation = TranslateAnimation(-5F, 5F, 0F, 0F)
+    animation.interpolator = OvershootInterpolator()
+    animation.duration = 100
+    animation.repeatCount = 3
+    animation.repeatMode = Animation.REVERSE
+    startAnimation(animation)
 }
-
-//<editor-fold desc="资源转换扩展">
-
-//fun @receiver:ColorInt Int.toColor(ctx: Context?): Int? {
-//    ctx?.also {
-//        return ContextCompat.getColor(ctx, this)
-//    }
-//    return null
-//}
-
-
-//</editor-fold>

@@ -8,10 +8,12 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.Toolbar
+import com.alibaba.android.arouter.facade.annotation.Route
+import com.alibaba.android.arouter.launcher.ARouter
 import com.gyf.immersionbar.ktx.immersionBar
 import com.zwping.jetpack.R
 import com.zwping.jetpack.ktxs.*
-import com.zwping.jetpack.ktxs.showToast
+import com.zwping.jetpack.showToast
 import kotlinx.android.synthetic.main.ac_tool_bar.*
 
 /**
@@ -23,6 +25,7 @@ import kotlinx.android.synthetic.main.ac_tool_bar.*
  * email    : 1101558280@qq.com
  * </pre>
  */
+@Route(path = "/jetpack/toolbar")
 class ToolbarAc : AppCompatActivity() {
 
     //
@@ -176,7 +179,7 @@ class ToolbarAc : AppCompatActivity() {
                 it.addView(
                         AppCompatTextView(ctx).also {
                             it.text = "Java使用toolbar ktx"
-                            it.setOnClickListener { ctx.startActivity(Intent(ctx, ToolbarJAc::class.java)) }
+                            it.setOnClickListener { ARouter.getInstance().build("/jetpack/toolbarj").navigation() }
                         }
                 )
 

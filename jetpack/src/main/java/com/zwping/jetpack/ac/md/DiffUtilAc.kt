@@ -7,19 +7,20 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.recyclerview.widget.RecyclerView
+import com.alibaba.android.arouter.facade.annotation.Route
 import com.scwang.smart.refresh.footer.ClassicsFooter
 import com.scwang.smart.refresh.header.ClassicsHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.zwping.jetpack.R
 import com.zwping.jetpack.databinding.ItemTestBinding
 import com.zwping.jetpack.ktxs.*
-import com.zwping.jetpack.manager.LiveDataBus
 import kotlinx.android.synthetic.main.activity_main.*
 
 /**
  *
  * zwping @ 12/25/20
  */
+@Route(path = "/jetpack/diffutil")
 class DiffUtilAc : AppCompatActivity(R.layout.activity_main) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,40 +55,39 @@ class DiffUtilAc : AppCompatActivity(R.layout.activity_main) {
                 removeFocus()
                 // setGridLayoutManager(3)
 
-                it.pagination.pageSize = 40
+                it.pagination.pageSize = 5
                 it.setDiffCallback2({ od, nd -> od == nd })
                 // it.emptyLayout = FrameLayout(this)
             }
 
 
             val pag = Pagination(3)
-            refreshLayout.setOnRefreshListener {
-                mockData(adapter.pagination.nextPage(true), adapter.pagination.pageSize,
-                        {
-                            adapter.setDataSuc(it, true, refreshLayout, pag)
-                        },
-                        {
-                            adapter.setDataErr(true, refreshLayout)
-                        })
-
-            }
-            refreshLayout.setOnLoadMoreListener {
-                mockData(adapter.pagination.nextPage(false), adapter.pagination.pageSize,
-                        {
-                            adapter.setDataSuc(it, false, refreshLayout, pag)
-                        },
-                        {
-                            adapter.setDataErr(false, refreshLayout)
-                        })
-            }
-
-            adapter.loadMoreModule.setOnLoadMoreListener {
-                mockData(adapter.pagination.nextPage(false), adapter.pagination.pageSize,
-                        {
-                            adapter.setDataSuc(it, false, refreshLayout, pag)
-                        },
-                        { adapter.setDataErr(false, refreshLayout) })
-            }
+//            refreshLayout.setOnRefreshListener {
+//                mockData(adapter.pagination.nextPage(true), adapter.pagination.pageSize,
+//                        {
+//                            adapter.setDataSuc(it, true, refreshLayout, pag)
+//                        },
+//                        {
+//                            adapter.setDataErr(true, refreshLayout)
+//                        })
+//            }
+//            refreshLayout.setOnLoadMoreListener {
+//                mockData(adapter.pagination.nextPage(false), adapter.pagination.pageSize,
+//                        {
+//                            adapter.setDataSuc(it, false, refreshLayout, pag)
+//                        },
+//                        {
+//                            adapter.setDataErr(false, refreshLayout)
+//                        })
+//            }
+//
+//            adapter.loadMoreModule.setOnLoadMoreListener {
+//                mockData(adapter.pagination.nextPage(false), adapter.pagination.pageSize,
+//                        {
+//                            adapter.setDataSuc(it, false, refreshLayout, pag)
+//                        },
+//                        { adapter.setDataErr(false, refreshLayout) })
+//            }
 
             refreshLayout.autoRefresh(500)
 
@@ -105,21 +105,9 @@ class DiffUtilAc : AppCompatActivity(R.layout.activity_main) {
                     }
                 })
 //                it.cancel()
-            }, 0, 3000).schedule(this)
+            }, 0, 3000)
+             .schedule(this)
         }
-
-
-
-
-        LiveDataBus.TestBus.observe(this) {
-            println("${javaClass.simpleName} -- $it")
-        }
-
-        val t = ITimer({
-            LiveDataBus.TestBus.data = i
-            ++i
-        }, 0, 1000).schedule(this, 2)
-        // t.cancel()
 
     }
 
@@ -135,6 +123,7 @@ class DiffUtilAc : AppCompatActivity(R.layout.activity_main) {
             }
 //             if (pageIndex != 1) data.removeAt(0)
 //             if (pageIndex != 1) data.clear()
+//            if (pageIndex == 1) for (i in 0 until 5) data.add("$i")
             lis.invoke(data)
 //            lisErr.invoke()
 //            if (pageIndex == 1) lis.invoke(data)

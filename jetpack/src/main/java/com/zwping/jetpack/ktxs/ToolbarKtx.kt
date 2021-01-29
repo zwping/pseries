@@ -169,7 +169,7 @@ class BadgeTextView @JvmOverloads constructor(context: Context, attrs: Attribute
 
     private val paint by lazy { Paint() }
     override fun onDraw(canvas: Canvas?) {
-        paint.color = color
+        paint.color = color;paint.isAntiAlias = true
         val w2 = width / 2F;canvas?.drawCircle(w2, w2, w2, paint)
         super.onDraw(canvas)
     }

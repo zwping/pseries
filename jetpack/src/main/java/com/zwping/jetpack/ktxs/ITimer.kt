@@ -9,12 +9,7 @@ import java.util.*
 
 /**
  * 定时器扩展
- * - 生命周期感知
- * - 单次计划执行
- * - 循环执行
- *
- * public class [ITimer]
- *  class method [count] [schedule] [cancel]
+ *  - Timer类封装[ITimer], 执行[schedule]具有生命周期感知, 当[period]=0时为单次计划执行, 可获取执行次数[count], 同时可主动取消[count]
  *
  * @param action
  * @param delay milliseconds 延迟时间

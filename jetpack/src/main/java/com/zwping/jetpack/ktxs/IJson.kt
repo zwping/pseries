@@ -34,12 +34,12 @@ abstract class IJson(obj: JSONObject? = null) {
         return data
     }
 
-    fun <BasicType> JSONObject.optJSONArrayBasic(key: String, lis: JSONArray.(Int) -> BasicType?): MutableList<BasicType>? {
+    fun <BasicType> JSONObject.optJSONArrayBasic(key: String, lis: (Any?) -> BasicType?): MutableList<BasicType>? {
         var data: MutableList<BasicType>? = null
         optJSONArray(key)?.apply {
             data = mutableListOf()
             for (i in 0 until length()) {
-                lis.invoke(this, i)?.also { data?.add(it) }
+                lis.invoke(get(i))?.also { data?.add(it) }
             }
         }
         return data
@@ -47,8 +47,8 @@ abstract class IJson(obj: JSONObject? = null) {
 
     companion object {
         @JvmStatic
-        fun <T : IJson> optJSONObject2(obj: JSONObject?, lis: (JSONObject) -> T): T? {
-            obj?.apply { return lis.invoke(obj) }
+        fun <T : IJson> optJSONObject2(obj: JSONObject?, key: String?, lis: (JSONObject) -> T): T? {
+            obj?.optJSONObject(key)?.apply { return lis.invoke(obj) }
             return null
         }
 
@@ -59,6 +59,18 @@ abstract class IJson(obj: JSONObject? = null) {
                 data = mutableListOf()
                 for (i in 0 until length()) {
                     optJSONObject(i)?.also { data?.add(lis.invoke(it)) }
+                }
+            }
+            return data
+        }
+
+        @JvmStatic
+        fun <BasicType> optJSONArray3(obj: JSONObject?, key: String?, lis: (Any?) -> BasicType?): MutableList<BasicType>? {
+            var data: MutableList<BasicType>? = null
+            obj?.optJSONArray(key)?.apply {
+                data = mutableListOf()
+                for (i in 0 until length()) {
+                    lis.invoke(get(i))?.also { data?.add(it) }
                 }
             }
             return data

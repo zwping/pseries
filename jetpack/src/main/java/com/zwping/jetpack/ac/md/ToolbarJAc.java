@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.gyf.immersionbar.ImmersionBar;
 import com.zwping.jetpack.R;
 import com.zwping.jetpack.databinding.AcToolBarBinding;
@@ -16,6 +17,7 @@ import com.zwping.jetpack.ktxs.ToolbarKtx;
 /**
  * zwping @ 2020/12/2
  */
+@Route(path = "/jetpack/toolbarj")
 public class ToolbarJAc extends AppCompatActivity {
 
     private AcToolBarBinding viewBinding;

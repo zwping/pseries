@@ -2,7 +2,13 @@ package com.zwping.jetpack
 
 import android.app.Activity
 import android.app.Application
+import android.content.Context
+import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.os.Bundle
+import com.alibaba.android.arouter.launcher.ARouter
+import com.zwping.jetpack.ktxs.RetrofitFactory
+import retrofit2.Retrofit
 
 /**
  *
@@ -11,6 +17,12 @@ import android.os.Bundle
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
+
+        if (isAppDebug(this)) {
+            ARouter.openLog()
+            ARouter.openDebug()
+        }
+        ARouter.init(this)
 
         lifecycle()
     }
@@ -53,5 +65,18 @@ class App : Application() {
             }
 
         })
+    }
+
+    /*** 获取APP是否Debug状态  */
+    fun isAppDebug(ctx: Context): Boolean {
+        return try {
+            val packageName: String = ctx.packageName
+            val pm: PackageManager = ctx.packageManager
+            val ai = pm.getApplicationInfo(packageName, 0)
+            ai != null && ai.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+            false
+        }
     }
 }
