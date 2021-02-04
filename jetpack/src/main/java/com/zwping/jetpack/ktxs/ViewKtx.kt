@@ -16,7 +16,7 @@ inline fun <V : View> V.setOnDebounceClickListener(time: Long = 500L, crossinlin
     var lastTime = 0L
     setOnClickListener {
         val curTime = System.currentTimeMillis()
-        if (curTime - lastTime > time || this is Checkable) { // 0.5秒只能点击一次
+        if (curTime - lastTime > time && this is Checkable) { // 0.5秒只能点击一次
             lastTime = curTime
             lambda(this)
         }
