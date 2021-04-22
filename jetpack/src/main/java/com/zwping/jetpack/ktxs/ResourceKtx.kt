@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.StateListDrawable
 import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 
 /**
@@ -25,11 +26,12 @@ inline fun Int.px2dp(): Float = (this / density)
 
 inline fun String?.toInt2(): Int = if (this == null || this == "") 0 else toInt()
 
+inline fun Context.getColor2(@ColorRes id: Int): Int = ContextCompat.getColor(this, id)
+
 /**
  * xml shape java代码实现方式
  * @param shape [GradientDrawable.LINE] 线 [GradientDrawable.OVAL] 圆
  * [GradientDrawable.RECTANGLE] 矩形 [GradientDrawable.LINEAR_GRADIENT] 虚线矩形
- * [GradientDrawable.RECTANGLE] 渐变色 [GradientDrawable.RECTANGLE] 透明度
  */
 inline fun GradientDrawable.create(shape: Int, dsl: GradientDrawable.() -> Unit): Drawable {
     this.shape = shape
@@ -87,8 +89,13 @@ class States<T> {
         value?.also { map[android.R.attr.state_checked] = value }
     }
 
+    @Deprecated("命名不明确", ReplaceWith("unEnabled(value)", "android"))
     fun enabled(value: T?) {
-        value?.also { map[-android.R.attr.state_enabled] = value } // 不可启用
+        value?.also { map[-android.R.attr.state_enabled] = value }
+    }
+
+    fun unEnabled(value: T?) {
+        value?.also { map[-android.R.attr.state_enabled] = value }
     }
 
     fun window_focused(value: T?) {

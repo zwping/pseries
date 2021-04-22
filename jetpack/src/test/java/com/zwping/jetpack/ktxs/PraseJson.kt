@@ -51,7 +51,7 @@ null,
             obj?.apply {
                 code = optInt("code")
                 msg = optString("msg")
-                data = optJSONArrayBasic("data") { optInt(it) }
+                data = optJSONArrayBasic("data") { optInt("$it") }
                 data1 = optJSONArrayOrNull("data1") { Bean(it) }
                 sbean = optJSONObjectOrNull("sbean") { Bean(it) }
             }

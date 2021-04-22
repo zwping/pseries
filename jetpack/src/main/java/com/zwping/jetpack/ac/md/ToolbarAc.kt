@@ -180,6 +180,7 @@ class ToolbarAc : AppCompatActivity() {
                         AppCompatTextView(ctx).also {
                             it.text = "Java使用toolbar ktx"
                             it.setOnClickListener { ARouter.getInstance().build("/jetpack/toolbarj").navigation() }
+//                            it.setOnClickListener { it.context.startActivity(Intent(it.context, ToolbarJAc::class.java)) }
                         }
                 )
 

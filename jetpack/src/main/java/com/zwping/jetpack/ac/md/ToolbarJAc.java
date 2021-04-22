@@ -12,7 +12,7 @@ import com.alibaba.android.arouter.facade.annotation.Route;
 import com.gyf.immersionbar.ImmersionBar;
 import com.zwping.jetpack.R;
 import com.zwping.jetpack.databinding.AcToolBarBinding;
-import com.zwping.jetpack.ktxs.ToolbarKtx;
+import com.zwping.jetpack.ktxs.ToolbarJx;
 
 /**
  * zwping @ 2020/12/2
@@ -33,7 +33,7 @@ public class ToolbarJAc extends AppCompatActivity {
         setSupportActionBar(viewBinding.toolBar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        ToolbarKtx.setStatusBarImmersion(viewBinding.toolBar);
+        // ToolbarJx.setStatusBarImmersion(viewBinding.toolBar);
         viewBinding.toolBar.setOnMenuItemClickListener(item -> {
             showToast(item.toString() + item.getItemId());
             return false;
@@ -47,9 +47,9 @@ public class ToolbarJAc extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        ToolbarKtx.addMenu(menu, 0x01, R.drawable.ic_baseline_android_24, "临时加", MenuItem.SHOW_AS_ACTION_IF_ROOM);
-        ToolbarKtx.addMenu(menu, 0x02, R.drawable.ic_baseline_search_24, "搜索", MenuItem.SHOW_AS_ACTION_IF_ROOM);
-        ToolbarKtx.addMenu(menu, 0x03, R.drawable.ic_baseline_settings_24, "设置", MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        ToolbarJx.addMenu(menu, 0x01, R.drawable.ic_baseline_android_24, "临时加", MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        ToolbarJx.addMenu(menu, 0x02, R.drawable.ic_baseline_search_24, "搜索", MenuItem.SHOW_AS_ACTION_IF_ROOM);
+        ToolbarJx.addMenu(menu, 0x03, R.drawable.ic_baseline_settings_24, "设置", MenuItem.SHOW_AS_ACTION_IF_ROOM);
         return super.onCreateOptionsMenu(menu);
     }
 
