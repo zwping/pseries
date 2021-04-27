@@ -1,9 +1,9 @@
-[submodule "plib_code"]
-	path = plib_code
+[submodule "android_demo/plib_code"]
+	path = android_demo/plib_code
 	url = https://github.com/zwping/PSeries_lib_code
-[submodule "plib_frame"]
-	path = plib_frame
+[submodule "android_demo/plib_frame"]
+	path = android_demo/plib_frame
 	url = https://github.com/zwping/PSeries_lib_frame
-[submodule "plib_update"]
-	path = plib_update
+[submodule "android_demo/plib_update"]
+	path = android_demo/plib_update
 	url = https://github.com/zwping/PSeries_lib_update
