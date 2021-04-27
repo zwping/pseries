@@ -1,2 +1,3 @@
+include ':x5test'
 include ':jetpack'
 include ':sample', ':plib_code', ':plib_update', ':plib_frame'

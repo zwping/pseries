@@ -4,6 +4,8 @@ import android.os.Handler
 import android.os.Looper
 import androidx.annotation.IntRange
 import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import java.util.*
 
@@ -17,15 +19,15 @@ import java.util.*
  *
  * zwping @ 12/24/20
  */
-class ITimer(private val action: (ITimer) -> Unit, private val delay: Long, private val period: Long = 0) {
+class ITimer(private val action: (ITimer) -> Unit, private val delay: Long, private val period: Long = 0): DefaultLifecycleObserver {
     /*** 执行次数 ***/
     var count = 0
         private set
 
     private var timer: Timer? = null
     private var task: TimerTask? = null
-
     private val handler by lazy { Handler(Looper.getMainLooper()) }
+    private var uEvent = 0
 
     /**
      * 执行
@@ -33,10 +35,11 @@ class ITimer(private val action: (ITimer) -> Unit, private val delay: Long, priv
      * @param lifecycle 0 onDestroy / 1 onStop / 2 onPause
      */
     fun schedule(owner: LifecycleOwner?, @IntRange(from = 0, to = 2) lifecycle: Int = 0): ITimer {
+        uEvent = lifecycle
+        owner?.also { it.lifecycle.removeObserver(this); it.lifecycle.addObserver(this) }
         cancel()
         count = 0
         initTimer()
-        autoDisposable(owner, lifecycle)
         if (0L == period) timer?.schedule(task, delay) // 单次计划执行
         else timer?.schedule(task, delay, period)
         return this
@@ -54,38 +57,29 @@ class ITimer(private val action: (ITimer) -> Unit, private val delay: Long, priv
     /* ------------------------------ */
 
     private fun initTimer() {
-        if (null == timer) {
-            timer = Timer()
-        }
+        if (null == timer) { timer = Timer() }
         if (null == task) {
             task = object : TimerTask() {
                 override fun run() {
-                    handler.post {
-                        ++count
-                        action(this@ITimer)
-                    }
+                    handler.post { ++count; action(this@ITimer) }
                 }
             }
         }
     }
 
-    private fun autoDisposable(owner: LifecycleOwner?, @IntRange(from = 0, to = 2) lifecycle: Int) {
-        owner?.lifecycle?.addObserver(object : DefaultLifecycleObserver {
-            override fun onDestroy(owner: LifecycleOwner) {
-                if (0 == lifecycle) cancel()
-                super.onDestroy(owner)
-            }
+    override fun onDestroy(owner: LifecycleOwner) {
+        super.onDestroy(owner)
+        if (0 == uEvent) { cancel() }
+    }
 
-            override fun onStop(owner: LifecycleOwner) {
-                if (1 == lifecycle) cancel()
-                super.onStop(owner)
-            }
+    override fun onStop(owner: LifecycleOwner) {
+        super.onStop(owner)
+        if (1 == uEvent) { cancel() }
+    }
 
-            override fun onPause(owner: LifecycleOwner) {
-                if (2 == lifecycle) cancel()
-                super.onPause(owner)
-            }
-        })
+    override fun onPause(owner: LifecycleOwner) {
+        super.onPause(owner)
+        if (2 == uEvent) { cancel() }
     }
 
 }

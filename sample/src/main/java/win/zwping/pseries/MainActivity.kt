@@ -1,24 +1,23 @@
 package win.zwping.pseries
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import android.widget.ProgressBar
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.activity_main.*
 import win.zwping.code.cview.StateLayout
 import win.zwping.code.review.PProgressBar
 import win.zwping.code.utils.FragmentUtil.replace
 import win.zwping.code.utils.HandlerUtil
 import win.zwping.code.utils.LogUtil
-import win.zwping.code.utils.SDCardUtil
-import win.zwping.frame.comm.CommPop
 import win.zwping.pseries.base.BaseAc
 import win.zwping.pseries.base.BaseBean
 import win.zwping.pseries.base.BaseFm
 import win.zwping.pseries.fm.cview.*
 import win.zwping.pseries.fm.review.*
-import java.util.ArrayList
+import java.util.*
 
 class MainActivity : BaseAc() {
 

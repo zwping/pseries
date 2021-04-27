@@ -10,6 +10,8 @@ import androidx.appcompat.widget.AppCompatButton
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.alibaba.android.arouter.launcher.ARouter
 import com.bumptech.glide.Glide
+import com.zwping.jetpack.ktxs.ITimer
+import com.zwping.jetpack.ktxs.ITimerJ
 import com.zwping.jetpack.ktxs.setOnDebounceClickListener
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.UnsupportedEncodingException
