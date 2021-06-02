@@ -1,3 +1,6 @@
+include ':apps'
+include ':plibx'
+include ':mobile_quicker'
 include ':x5test'
 include ':jetpack'
 include ':sample', ':plib_code', ':plib_update', ':plib_frame'

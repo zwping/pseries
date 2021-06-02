@@ -18,9 +18,9 @@ class PRecyclerViewFm : BaseFm() {
 
     override fun doBusiness() {
         pvp?.setAdapterFm(childFragmentManager,
-                listOf( LinearPRvFm(), GridPRvFm(), SectionPRvFm(), StickPRvFm(), DecorationPRvFm(), AutoLoadMorePRvFm(),AutoLoadMoreOfRefreshPRvFm()),
+                listOf( LinearPRvFm(), GridPRvFm(), RvGridSpanSizeFm(), SectionPRvFm(), StickPRvFm(), DecorationPRvFm(), AutoLoadMorePRvFm(),AutoLoadMoreOfRefreshPRvFm()),
                 ptl,
-                listOf( "线性", "网格", "分组", "吸顶", "分割线", "自动加载", "自动加载(SmartRefresh)"))
+                listOf( "线性", "网格",  "网格占列", "分组", "吸顶", "分割线", "自动加载", "自动加载(SmartRefresh)"))
 //        pvp?.setAdapterFmOfBanner(childFragmentManager,
 //                listOf(AutoLoadMorePRvFm(), LinearPRvFm(), GridPRvFm(), SectionPRvFm(), StickPRvFm(), DecorationPRvFm(), AutoLoadMorePRvFm(), LinearPRvFm())
 //        ) { position, total -> showToast("$position----$total") }

@@ -33,6 +33,9 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    viewBinding {
+        enabled = true
+    }
 }
 
 dependencies {
@@ -41,6 +44,7 @@ dependencies {
     androidTestImplementation 'androidx.test:runner:1.3.0-rc02'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0-rc02'
     implementation project(':plib_frame')
+    implementation project(':plibx')
 }
 
 task _test {

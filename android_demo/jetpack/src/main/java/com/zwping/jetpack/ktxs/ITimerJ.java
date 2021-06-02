@@ -1,16 +1,16 @@
 package com.zwping.jetpack.ktxs;
 
-import android.os.Looper;
-
-import java.util.Timer;
-import java.util.TimerTask;
 import android.os.Handler;
+import android.os.Looper;
 
 import androidx.annotation.IntRange;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleEventObserver;
 import androidx.lifecycle.LifecycleOwner;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * zwping @ 4/23/21
@@ -36,6 +36,9 @@ public class ITimerJ implements LifecycleEventObserver {
     private TimerTask task;
     private Handler handler = new Handler(Looper.getMainLooper());
     private int uEvent;
+    private OnLifecycleChange onLifecycleChange;
+
+    public ITimerJ setOnLifecycleChange(OnLifecycleChange lis) { this.onLifecycleChange = lis; return this; }
 
     public ITimerJ schedule(LifecycleOwner owner, @IntRange(from = 0, to = 2) int uEvent) {
         if (null != owner) {
@@ -84,6 +87,7 @@ public class ITimerJ implements LifecycleEventObserver {
 
     @Override
     public void onStateChanged(@NonNull LifecycleOwner source, @NonNull Lifecycle.Event event) {
+        if (null != onLifecycleChange) { onLifecycleChange.onEvent(this, event); }
         if (0 == uEvent && event == Lifecycle.Event.ON_DESTROY) {
             cancel();
         } else if (1 == uEvent && event == Lifecycle.Event.ON_STOP) {
@@ -95,8 +99,8 @@ public class ITimerJ implements LifecycleEventObserver {
 
     /* ================== */
 
-    public interface OnActionLis{
-        void action(ITimerJ it);
-    }
+    public interface OnActionLis{ void action(ITimerJ it); }
+
+    public interface OnLifecycleChange{ void onEvent(@NonNull ITimerJ it, @NonNull Lifecycle.Event event); }
 
 }

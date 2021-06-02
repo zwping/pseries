@@ -59,6 +59,7 @@ public class ResourceJx {
      * @param <T>   @DrawableRes or @Drawable
      * @return
      */
+    @Deprecated
     public static <T> StateListDrawable createStateListDrawable(StateListDrawable dw,
                                                                 @Nullable Context ctx,
                                                                 T defaultRes,
