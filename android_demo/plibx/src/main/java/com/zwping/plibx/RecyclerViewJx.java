@@ -1,17 +1,17 @@
 package com.zwping.plibx;
 
 import android.content.Context;
-import android.view.View;
-import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewbinding.ViewBinding;
 
-import kotlin.Unit;
-import kotlin.jvm.functions.Function1;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * zwping @ 4/23/21
@@ -60,9 +60,78 @@ public class RecyclerViewJx {
 
     /* ======================= */
 
-    /**
-     * 管理分页信息
-     */
+    public static abstract class BaseAdapter<E> extends RecyclerView.Adapter<BaseVH<E, ViewBinding>> {
+        protected List<E> datas = new ArrayList<>();
+        public List<E> getDatas() { return datas; }
+
+        public DiffCallback<E> diffCallback;
+        public void setData(List<E> data) { setData(data, true); }
+        public void setData(List<E> data, boolean detectMoves) {
+            if (data == null) { return; }
+            if (null == diffCallback) {
+                datas = data; notifyDataSetChanged();
+                return;
+            }
+            _od.clear(); _od.addAll(datas);
+            _nd.clear(); _nd.addAll(data);
+            DiffUtil.calculateDiff(_diffCallBack, detectMoves).dispatchUpdatesTo(this);
+            datas = data;
+        }
+        public void addData(List<E> data) {
+            if (null == data || data.size() == 0) { return; }
+            datas.addAll(data); notifyItemRangeChanged(datas.size()-data.size(), datas.size());
+        }
+
+        @Override
+        public int getItemViewType(int position) { return super.getItemViewType(position); } // 多布局实现
+        @Override
+        public void onBindViewHolder(@NonNull BaseVH<E, ViewBinding> holder, int position) { holder.bind(datas.get(position)); }
+
+        @Override
+        public int getItemCount() { return datas.size(); }
+
+        private final List<E> _od = new ArrayList<>();
+        private final List<E> _nd = new ArrayList<>();
+        private final DiffUtil.Callback _diffCallBack = new DiffUtil.Callback() {
+            @Override
+            public int getOldListSize() { return _od.size(); }
+            @Override
+            public int getNewListSize() { return _nd.size(); }
+
+            @Override
+            public boolean areItemsTheSame(int op, int np) { return diffCallback==null ? false : diffCallback.areItemsTheSame(_od.get(op), _nd.get(np)); }
+            @Override
+            public boolean areContentsTheSame(int op, int np) { return diffCallback==null ? false : diffCallback.areContentsTheSame(_od.get(op), _nd.get(np)); }
+            @Nullable
+            @Override
+            public Object getChangePayload(int op, int np) { return diffCallback==null ? super.getChangePayload(op, np) : diffCallback.getChangePayload(_od.get(op), _nd.get(np)); }
+        };
+    }
+
+    public static class BaseVH<E, VB extends ViewBinding> extends RecyclerView.ViewHolder {
+        protected VB vb;
+        protected E entity;
+        private final OnBindViewHolder<E, VB> onBindViewHolder;
+
+        public BaseVH(VB vb, OnBindViewHolder<E, VB> onBindViewHolder) {
+            super(vb.getRoot());
+            this.vb = vb;
+            this.onBindViewHolder = onBindViewHolder;
+        }
+
+        public void bind(E e) { this.entity = e; onBindViewHolder.invoke(vb, e); }
+
+        public Context getCtx() { return itemView.getContext(); }
+    }
+    public interface OnBindViewHolder<E, VB extends ViewBinding> { void invoke(VB vb, E e); }
+
+    public static abstract class DiffCallback<E> {
+        public abstract Boolean areItemsTheSame(E od, E nd);
+        public Boolean areContentsTheSame(E od, E nd) { return false; }
+        public Object getChangePayload(E od, E nd) { return null; }
+    }
+
+    /*** 管理分页信息 ***/
     public static class Pagination {
 
         public Pagination() { }
@@ -97,19 +166,17 @@ public class RecyclerViewJx {
 
         @Override
         public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
-            try { super.onLayoutChildren(recycler, state); }
-            catch (Exception e) {  }
+            try { super.onLayoutChildren(recycler, state); } catch (Exception e) {  }
         }
     }
 
-    public static class GridLayoutManager2 extends GridLayoutManager{
+    public static class GridLayoutManager2 extends GridLayoutManager {
 
         public GridLayoutManager2(Context context, int spanCount, int orientation, boolean reverseLayout) { super(context, spanCount, orientation, reverseLayout); }
 
         @Override
         public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
-            try { super.onLayoutChildren(recycler, state); }
-            catch (Exception e) {  }
+            try { super.onLayoutChildren(recycler, state); } catch (Exception e) {  }
         }
     }
 

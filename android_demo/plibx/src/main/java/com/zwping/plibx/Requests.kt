@@ -27,8 +27,6 @@ import java.net.UnknownHostException
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 import kotlin.random.Random
 
 /**
@@ -66,11 +64,11 @@ object Requests {
     suspend fun Call.execute2(): Response2 = withContext(Dispatchers.Default) { _execute() }
 
     fun Call.enqueue2(
-            owner: LifecycleOwner?,
-            onResponse: (Call, Response) -> Unit,
-            onFailure: (Call, msg: String) -> Unit,
-            onStart: () -> Unit = {},
-            onEnd: () -> Unit = {}
+        owner: LifecycleOwner?,
+        onResponse: (Call, Response, String) -> Unit,
+        onFailure: (Call, msg: String) -> Unit,
+        onStart: () -> Unit = {},
+        onEnd: () -> Unit = {}
     ) {
         if (owner?.lifecycle?.currentState == Lifecycle.State.DESTROYED) return
         val once = AtomicBoolean()
@@ -87,14 +85,14 @@ object Requests {
     }
 
     fun Call.enqueueDown(
-            owner: LifecycleOwner?,
-            dir: String,
-            onFinish: (Call, Response, filePath: String) -> Unit,
-            onFailure: (Call, msg: String) -> Unit,
-            onProgress: (progress: Int, curSize: Long, total: Long, fileName: String) -> Unit = { _, _, _, _ -> },
-            name: String? = null,
-            onStart: () -> Unit = {},
-            onEnd: () -> Unit = {})
+        owner: LifecycleOwner?,
+        dir: String,
+        onFinish: (Call, Response, filePath: String) -> Unit,
+        onFailure: (Call, msg: String) -> Unit,
+        onProgress: (progress: Int, curSize: Long, total: Long, fileName: String) -> Unit = { _, _, _, _ -> },
+        name: String? = null,
+        onStart: () -> Unit = {},
+        onEnd: () -> Unit = {})
     {
         if (owner?.lifecycle?.currentState == Lifecycle.State.DESTROYED) return
         val once = AtomicBoolean()
@@ -108,7 +106,7 @@ object Requests {
                     return
                 }
                 val fileName = if (name?.isNotEmpty() == true) name
-                            else try { with(URL(call.request().url.toString()).path) { substring(lastIndexOf("/") + 1) } } catch (e: Exception) { "${System.currentTimeMillis()}-${Random.nextInt()}" }
+                else try { with(URL(call.request().url.toString()).path) { substring(lastIndexOf("/") + 1) } } catch (e: Exception) { "${System.currentTimeMillis()}-${Random.nextInt()}" }
                 val file = File(dir, fileName)
                 if (null != owner) {
                     owner.lifecycleScope.launch(Dispatchers.IO) {
@@ -196,10 +194,10 @@ object Requests {
     }
 
     class Optional(
-            val request: Request.Builder,
-            val params: HashMap<Any, Any?> = hashMapOf(),
-            val data: HashMap<Any, Any?> = hashMapOf(),
-            var json: JSONObject? = null,
+        val request: Request.Builder,
+        val params: HashMap<Any, Any?> = hashMapOf(),
+        val data: HashMap<Any, Any?> = hashMapOf(),
+        var json: JSONObject? = null,
     ) {
 
         /*
@@ -246,8 +244,9 @@ object Requests {
     }
 
     data class Response2(val isSuccessful: Boolean,
-                         val call: Call, val response: ResponseBody? = null,
-                         val responseStr: String? = null, val msg: String = "数据错误!")
+                         val call: Call,
+                         val response: ResponseBody? = null, val responseStr: String? = null, val responseOb: JSONObject? = null,
+                         val msg: String = "数据错误!")
 
     inline fun Response2.isSuccessful2Safe(): Boolean = isSuccessful && !responseStr.isNullOrBlank()
 
@@ -262,7 +261,8 @@ object Requests {
             try {
                 val response = execute()
                 if (response.isSuccessful) {
-                    Response2(true, this, response.body, response.body?.string())
+                    val str = response.body?.string()
+                    Response2(true, this, response.body, str, str?.toJSONObject())
                 } else {
                     Response2(false, this, msg = "请求失败-${response.code}")
                 }
@@ -289,9 +289,20 @@ object Requests {
         })
     }
 
-    private fun _onResponse(call: Call, response: Response, once: AtomicBoolean, onResponse: (Call, Response) -> Unit, onFailure: (Call, String) -> Unit, onEnd: () -> Unit) {
+    private fun _onResponse(call: Call, response: Response, once: AtomicBoolean, onResponse: (Call, Response, String) -> Unit, onFailure: (Call, String) -> Unit, onEnd: () -> Unit) {
         if (once.get()) return
         once.set(true)
+        if (response.isSuccessful && response.body != null) {
+            val str = response.body!!.string()
+            try {
+                handler.post { onResponse.invoke(call, response, str); onEnd() }
+            } catch (e: Exception) {
+                handler.post { onFailure.invoke(call, "数据错误"); onEnd.invoke() }
+            }
+        } else {
+            handler.post { onFailure.invoke(call, "请求失败-${response.code}"); onEnd.invoke() }
+        }
+        /* response.body!!.string() 过程异步, 不能放在主线程中读取
         handler.post {
             try {
                 if (response.isSuccessful) onResponse.invoke(call, response)
@@ -301,6 +312,7 @@ object Requests {
                 onFailure.invoke(call, "数据错误"); onEnd.invoke()
             }
         }
+         */
     }
 
     private fun _onFinish(file: File, call: Call, response: Response, once: AtomicBoolean, onFinish: (Call, Response, filePath: String) -> Unit, onFailure: (Call, String) -> Unit, onEnd: () -> Unit) {

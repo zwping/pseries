@@ -26,7 +26,6 @@ class AcSplash : AppCompatActivity() {
             startActivity(Intent(if (Utils.isAdbEnable(this)) Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS else  Settings.ACTION_DEVICE_INFO_SETTINGS))
         }
         vb.btnProcess.setOnClickListener { startActivity(Intent(Settings.ACTION_APPLICATION_DEVELOPMENT_SETTINGS)) }
-
     }
 
     private fun showToast(msg: Any?) { Toast.makeText(this, "$msg", Toast.LENGTH_SHORT).show() }

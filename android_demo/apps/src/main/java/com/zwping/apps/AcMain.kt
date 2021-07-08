@@ -231,7 +231,8 @@ class AcMain : AppCompatActivity() {
                         vb.pb.visibility = if (entity.downIng) View.VISIBLE else View.GONE
                         vb.tvDesc.text =
                                 "local  : ${entity.localLTime?.let { dateFormat.format(it) } ?: ""} ${entity.lvname ?: ""} ${entity.lfircode?.let { "f$it" } ?: ""}" +
-                                        "\nserver: ${entity.firLTime?.let { dateFormat.format(it * 1000) } ?: ""} ${entity.svname ?: ""} ${entity.sfircode?.let { "f$it" } ?: ""}"
+                                        "\nserver: ${entity.firLTime?.let { dateFormat.format(it * 1000) } ?: ""} ${entity.svname ?: ""} ${entity.sfircode?.let { "f$it" } ?: ""}" +
+                                        "\n${entity.download_domain}\\${entity.short}"
                         entity.icon?.also { Glide.with(vb.ivIcon).load(it).into(vb.ivIcon) }
                     }).apply {
                         vb.pb.progressDrawable =

@@ -53,10 +53,16 @@ Toolbar布局: [ navigationIcon - logoIcon - title/subTitle - (childView) - menu
  * @param title 标题
  * @return AppCompatTextView
  */
-fun Toolbar.setTitleOfCenter(title: CharSequence?): AppCompatTextView? {
+fun Toolbar.setTitleOfCenter(title: CharSequence?): AppCompatTextView {
     setTitle("") // 置空默认标题
     contentInsetStartWithNavigation = 0
+    for (i in 0 until childCount) {
+        val v = getChildAt(i)
+        if (v.tag?.toString() == "OfCenter" && v.parent != null && v.parent is ViewGroup)
+            (v.parent as ViewGroup).removeView(v)
+    }
     return AppCompatTextView(context).also {
+        it.tag = "OfCenter"
         it.layoutParams = ActionBar.LayoutParams(WRAP_CONTENT, WRAP_CONTENT, Gravity.CENTER)
         it.setSingleLine();it.ellipsize = TextUtils.TruncateAt.END
         it.setTextAppearance(context, android.R.style.TextAppearance_Material_Widget_Toolbar_Title)
@@ -219,18 +225,18 @@ class ActionProvider2(context: Context?, item: MenuItem) : ActionProvider(contex
             layoutParams = ViewGroup.LayoutParams(defaultH, MATCH_PARENT)
             setBackgroundResource(TypedValue().also { getContext().theme.resolveAttribute(android.R.attr.actionBarItemBackground, it, true) }.resourceId)
             addView( // 增加图标
-                    AppCompatImageView(context).apply {
-                        iconView = this
-                        layoutParams = FrameLayout.LayoutParams(defaultH / 2, defaultH / 2).apply { gravity = Gravity.CENTER }
-                        scaleType = ImageView.ScaleType.CENTER;setImageDrawable(item.icon)
-                    })
+                AppCompatImageView(context).apply {
+                    iconView = this
+                    layoutParams = FrameLayout.LayoutParams(defaultH / 2, defaultH / 2).apply { gravity = Gravity.CENTER }
+                    scaleType = ImageView.ScaleType.CENTER;setImageDrawable(item.icon)
+                })
             addView( // 增加badge
-                    BadgeTextView(context).apply {
-                        badgeView = this
-                        val w = (14 * context.resources.displayMetrics.density).toInt()
-                        layoutParams = FrameLayout.LayoutParams(w, w).apply { gravity = Gravity.CENTER; leftMargin = defaultH / 4; bottomMargin = defaultH / 4 }
-                        gravity = Gravity.CENTER; setTextColor(Color.WHITE); textSize = 9F; visibility = View.INVISIBLE
-                    }
+                BadgeTextView(context).apply {
+                    badgeView = this
+                    val w = (14 * context.resources.displayMetrics.density).toInt()
+                    layoutParams = FrameLayout.LayoutParams(w, w).apply { gravity = Gravity.CENTER; leftMargin = defaultH / 4; bottomMargin = defaultH / 4 }
+                    gravity = Gravity.CENTER; setTextColor(Color.WHITE); textSize = 9F; visibility = View.INVISIBLE
+                }
             )
         }
     }
@@ -239,48 +245,5 @@ class ActionProvider2(context: Context?, item: MenuItem) : ActionProvider(contex
         this.item = item
     }
 
-    override fun onCreateActionView(): View? = ly
-}
-
-/*** 兼容Java ***/
-object ToolbarKtx {
-    @JvmStatic
-    fun setTitleOfCenter(toolbar: Toolbar?, title: CharSequence?): AppCompatTextView? {
-        return toolbar?.setTitleOfCenter(title)
-    }
-
-    @JvmStatic
-    fun setTitleCenter(toolbar: Toolbar?, title: CharSequence?) {
-        toolbar?.setTitleCenter(title)
-    }
-
-    @JvmStatic
-    fun addMenu(toolbar: Toolbar?, itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, actionEnum: Int = MenuItem.SHOW_AS_ACTION_IF_ROOM) {
-        toolbar?.addMenu(itemId, iconRes, title, actionEnum)
-    }
-
-    @JvmStatic
-    fun addMenu(menu: Menu?, itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, actionEnum: Int = MenuItem.SHOW_AS_ACTION_IF_ROOM) {
-        menu?.addMenu(itemId, iconRes, title, actionEnum)
-    }
-
-    @JvmStatic
-    fun addMenuBadge(toolbar: Toolbar?, itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, menuItemClickListener: ((ActionProvider2) -> Unit)? = null): ActionProvider2? {
-        return toolbar?.addMenuBadge(itemId, iconRes, title, menuItemClickListener)
-    }
-
-    @JvmStatic
-    fun addMenuBadge(menu: Menu?, ctx: Context?, itemId: Int, @DrawableRes iconRes: Int, title: CharSequence, menuItemClickListener: ((ActionProvider2) -> Unit)? = null): ActionProvider2? {
-        return menu?.addMenuBadge(ctx, itemId, iconRes, title, menuItemClickListener)
-    }
-
-    @JvmStatic
-    fun getActionProvider2(toolbar: Toolbar?, itemId: Int): ActionProvider2? {
-        return toolbar?.getActionProvider2(itemId)
-    }
-
-    @JvmStatic
-    fun setStatusBarImmersion(toolbar: Toolbar?) {
-        toolbar?.setStatusBarImmersion()
-    }
+    override fun onCreateActionView(): View = ly
 }

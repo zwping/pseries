@@ -21,7 +21,6 @@ import androidx.core.content.ContextCompat
  */
 val density by lazy { Resources.getSystem().displayMetrics.density }
 inline fun Float.dp2px(): Int = (0.5f + this * density).toInt()
-
 inline fun Int.px2dp(): Float = (this / density)
 
 inline fun String?.toInt2(): Int = if (this == null || this == "") 0 else toInt()
@@ -70,36 +69,13 @@ class ColorStateList2(@ColorInt defaultColor: Int, dsl: States<Int>.() -> Unit =
 /*** view状态的实现 ***/
 class States<T> {
     val map = hashMapOf<Int, T>()
-    fun pressed(value: T?) {
-        value?.also { map[android.R.attr.state_pressed] = value }
-    }
-
-    fun focused(value: T?) {
-        value?.also { map[android.R.attr.state_focused] = value }
-    }
-
-    fun selected(value: T?) {
-        value?.also { map[android.R.attr.state_selected] = value }
-    }
-
-    fun checkable(value: T?) {
-        value?.also { map[android.R.attr.state_checkable] = value }
-    }
-
-    fun checked(value: T?) {
-        value?.also { map[android.R.attr.state_checked] = value }
-    }
-
-    @Deprecated("命名不明确", ReplaceWith("unEnabled(value)", "android"))
-    fun enabled(value: T?) {
-        value?.also { map[-android.R.attr.state_enabled] = value }
-    }
-
-    fun unEnabled(value: T?) {
-        value?.also { map[-android.R.attr.state_enabled] = value }
-    }
-
-    fun window_focused(value: T?) {
-        value?.also { map[android.R.attr.state_window_focused] = value }
-    }
+    fun pressed(value: T?) { value?.also { map[android.R.attr.state_pressed] = value } }
+    fun focused(value: T?) { value?.also { map[android.R.attr.state_focused] = value } }
+    fun selected(value: T?) { value?.also { map[android.R.attr.state_selected] = value } }
+    fun checkable(value: T?) { value?.also { map[android.R.attr.state_checkable] = value } }
+    fun checked(value: T?) { value?.also { map[android.R.attr.state_checked] = value } }
+    @Deprecated("命名不恰当", ReplaceWith("unEnabled(value)", "android"))
+    fun enabled(value: T?) { value?.also { map[-android.R.attr.state_enabled] = value } }
+    fun unEnabled(value: T?) { value?.also { map[-android.R.attr.state_enabled] = value } }
+    fun window_focused(value: T?) { value?.also { map[android.R.attr.state_window_focused] = value } }
 }

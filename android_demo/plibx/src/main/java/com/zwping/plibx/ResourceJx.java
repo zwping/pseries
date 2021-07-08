@@ -79,6 +79,10 @@ public class ResourceJx {
     }
 
 
+    public static ColorStateList createColorStateList2(@ColorInt int defaultColor, CommCallback<States<Integer>> dsl){
+        return new ColorStateList2(defaultColor, dsl).create();
+    }
+
     /*** xml selector item color java代码实现 ***/
     public static class ColorStateList2{
         private List<int[]> ids = new ArrayList<>();
@@ -118,25 +122,25 @@ public class ResourceJx {
     public static class States<T> {
         HashMap<Integer, T> map = new HashMap<Integer, T>();
 
-        void pressed(@NonNull T value) {
+        public void pressed(@NonNull T value) {
             map.put(android.R.attr.state_pressed, value);
         }
-        void focused(@NonNull T value) {
+        public void focused(@NonNull T value) {
             map.put(android.R.attr.state_focused, value);
         }
-        void selected(@NonNull T value) {
+        public void selected(@NonNull T value) {
             map.put(android.R.attr.state_selected, value);
         }
-        void checkable(@NonNull T value) {
+        public void checkable(@NonNull T value) {
             map.put(android.R.attr.state_checkable, value);
         }
-        void checked(@NonNull T value) {
+        public void checked(@NonNull T value) {
             map.put(android.R.attr.state_checked, value);
         }
-        void unEnabled(@NonNull T value) {
+        public void unEnabled(@NonNull T value) {
             map.put(-android.R.attr.state_enabled, value);
         }
-        void window_focused(@NonNull T value) { map.put(android.R.attr.state_window_focused, value); }
+        public void window_focused(@NonNull T value) { map.put(android.R.attr.state_window_focused, value); }
     }
 
     public interface CommCallback<T> { void callback(@Nullable T it); }

@@ -49,33 +49,25 @@ class RvGridSpanSizeFm : BaseFm() {
                 }
             }
         }
-        rv.adapter = adapter
-        adapter.data = data
+//        rv.adapter = adapter
+//        adapter.data = data
     }
 
-    private val adapter by lazy {
-        object : BaseAdapter<Bean>() {
-            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): <provider
-            android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.zhy.android7.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-            android:name="android.support.FILE_PROVIDER_PATHS"
-            android:resource="@xml/file_paths" />
-            </provider>BaseVH<ViewBinding, Bean> {
-                return VH1(ItemRvGrid21Binding.inflate(LayoutInflater.from(parent.context), parent, false))
-            }
-
-
-            inner class VH1(vb: ItemRvGrid21Binding) : BaseVH<ItemRvGrid21Binding, Bean>(vb) {
-                override fun bind(entity: Bean) {
-                    super.bind(entity)
-                    this.vb.tvTitle.text = entity.value
-                }
-            }
-        }
-    }
+//    private val adapter by lazy {
+//        object : BaseAdapter<Bean>() {
+//            override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseVH<ViewBinding, Bean> {
+//                return VH1(ItemRvGrid21Binding.inflate(LayoutInflater.from(parent.context), parent, false))
+//            }
+//
+//
+//            inner class VH1(vb: ItemRvGrid21Binding) : BaseVH<Bean, ItemRvGrid21Binding>(vb) {
+//                override fun bind(entity: Bean) {
+//                    super.bind(entity)
+//                    this.vb.tvTitle.text = entity.value
+//                }
+//            }
+//        }
+//    }
 
     data class Bean(val type: Int, val value: String)
 

@@ -1,9 +1,13 @@
 package com.zwping.plibx
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.Recycler
 import androidx.viewbinding.ViewBinding
 
 /**
@@ -63,3 +67,75 @@ open class BaseVH<E, out VB : ViewBinding>(val vb: VB, private val bindViewHolde
 }
 
 fun ViewGroup.getLayoutInflater(): LayoutInflater { return LayoutInflater.from(context) }
+
+inline fun RecyclerView.removeFocus() { isFocusableInTouchMode = false; requestFocus() }
+inline fun RecyclerView.setLinearLayoutManager(
+                    @RecyclerView.Orientation ort: Int = RecyclerView.VERTICAL,
+                    noScrollV: Boolean = false,
+                    noScrollH: Boolean = false) {
+    layoutManager = object : LinearLayoutManager2(context, ort, false) {
+        override fun canScrollVertically(): Boolean {
+            return if (noScrollV) false else super.canScrollVertically()
+        }
+        override fun canScrollHorizontally(): Boolean {
+            return if (noScrollH) false else super.canScrollHorizontally()
+        }
+    }
+}
+inline fun RecyclerView.setGradLayoutManager(
+                    spanCount: Int,
+                    @RecyclerView.Orientation ort: Int = RecyclerView.VERTICAL,
+                    noScrollV: Boolean = false,
+                    noScrollH: Boolean = false) {
+    layoutManager = object : GridLayoutManager2(context, spanCount, ort, false) {
+        override fun canScrollVertically(): Boolean {
+            return if (noScrollV) false else super.canScrollVertically()
+        }
+        override fun canScrollHorizontally(): Boolean {
+            return if (noScrollH) false else super.canScrollHorizontally()
+        }
+    }
+}
+
+/*** 管理分页信息  */
+open class Pagination {
+    constructor() {}
+    constructor(totalSize: Int) { this.totalSize = totalSize }
+
+    var curPage = 1
+    var curTotal = 0
+    var pageSize = 20
+    var totalPage = -1
+    var totalSize = -1
+    fun setTotalPage(totalPage: Int): Pagination {
+        this.totalPage = totalPage; return this
+    }
+
+    fun nextPage(r: Boolean): Int = if (r) 1 else curPage + 1
+
+    /**
+     * 是否到达最后一页, (最新返回数据为null时不在考虑范围内, 主要计算data<=pageSize)
+     * @param inPageSize 依据pageSize来计算, 返回数<pageSize></pageSize>
+     *
+     */
+    @JvmOverloads
+    fun hasEnd(inPageSize: Boolean = true): Boolean {
+        return totalPage > -1 && curPage >= totalPage || totalSize > -1 && curTotal >= totalSize || inPageSize && curTotal % pageSize != 0
+    }
+}
+
+// diffUtil中易出现 Fix Google Bug https://stackoverflow.com/questions/31759171/recyclerview-and-java-lang-indexoutofboundsexception-inconsistency-detected-in/37050829
+open class LinearLayoutManager2(context: Context?, orientation: Int, reverseLayout: Boolean) :
+    LinearLayoutManager(context, orientation, reverseLayout) {
+    override fun onLayoutChildren(recycler: Recycler, state: RecyclerView.State) {
+        try { super.onLayoutChildren(recycler, state) }
+        catch (e: Exception) { }
+    }
+}
+open class GridLayoutManager2(context: Context?, spanCount: Int, orientation: Int, reverseLayout: Boolean) :
+    GridLayoutManager(context, spanCount, orientation, reverseLayout) {
+    override fun onLayoutChildren(recycler: Recycler, state: RecyclerView.State) {
+        try { super.onLayoutChildren(recycler, state) }
+        catch (e: Exception) { }
+    }
+}
