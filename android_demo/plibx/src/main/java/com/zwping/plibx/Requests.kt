@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import android.os.Handler
 import android.os.Looper
-import android.webkit.MimeTypeMap
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
@@ -13,17 +12,13 @@ import kotlinx.coroutines.*
 import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import okio.*
 import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.net.ConnectException
-import java.net.SocketTimeoutException
-import java.net.URL
-import java.net.UnknownHostException
+import java.net.*
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 import kotlin.coroutines.resume
@@ -158,26 +153,32 @@ object Requests {
     }
 
 
-    class UploadRequestBody(private val file: File, private val onProgress: (progress: Int, curSize: Long, total: Long, fileName: String) -> Unit) : RequestBody(){
+    class UploadRequestBody(private val fileName: String, private val file: File, private val onProgress: (progress: Int, curSize: Long, total: Long, fileName: String) -> Unit) : RequestBody(){
 
-        val requestBody by lazy {
-            val mediaType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(file.absolutePath))?.toMediaTypeOrNull()
-            file.asRequestBody(mediaType)
+        private val requestBody by lazy {
+            // val mediaType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(file.absolutePath))?.toMediaTypeOrNull()
+            // file.asRequestBody(mediaType)
+            file.asRequestBody("multipart/form-data".toMediaType())
         }
 
-        private var bufferedSink: BufferedSink? = null
-        private fun sink(sink: Sink): Sink = object : ForwardingSink(sink) {
-            var bytesWritten = 0L
-            val contentLength by lazy { contentLength() }
-            var progress = -1
+        private fun Sink(sink: Sink): Sink = object : ForwardingSink(sink) {
+            private var bytesWritten = 0L
+            private var contentLength = 0L
+            private var progress = -1
+            private var progressLock = -1
 
             override fun write(source: Buffer, byteCount: Long) {
                 super.write(source, byteCount)
+                if (contentLength == 0L) contentLength = contentLength()
                 bytesWritten += byteCount
                 (bytesWritten * 100 / contentLength).toInt().also {
                     if (progress != it) {
                         progress = it
-                        handler.post { onProgress.invoke(progress, bytesWritten, contentLength, file.name) }
+                        handler.post {
+                            if (progressLock == progress) return@post
+                            progressLock = progress
+                            onProgress.invoke(progressLock, bytesWritten, contentLength, fileName)
+                        }
                     }
                 }
             }
@@ -187,8 +188,9 @@ object Requests {
         override fun contentLength(): Long = requestBody.contentLength()
 
         override fun writeTo(sink: BufferedSink) {
-            if (null == bufferedSink) bufferedSink = sink(sink).buffer()
-            bufferedSink?.also { requestBody.writeTo(it); it.flush() }
+            val bufferedSink = Sink(sink).buffer()
+            requestBody.writeTo(bufferedSink)
+            bufferedSink.flush()
         }
 
     }
@@ -224,7 +226,8 @@ object Requests {
             addRequestBodyOfFile(name, file, onProgress)
         }
         fun addRequestBodyOfFile(name: String, file: File, onProgress: (progress: Int, curSize: Long, total: Long, fileName: String) -> Unit){
-            multipartBody?.addFormDataPart(name, file.name, UploadRequestBody(file, onProgress))
+            val fileName = file.name.safeName()
+            multipartBody?.addFormDataPart(name, fileName, UploadRequestBody(fileName, file, onProgress))
         }
 
         fun addParams(key: Any, value: Any?) { params[key] = value }
@@ -364,6 +367,6 @@ object Requests {
         return this
     }
 
-
+    inline fun String.safeName() = try { URLEncoder.encode(this, "UTF-8") } catch (e: Exception) { "${System.currentTimeMillis()}_unName" }
     inline fun Context?.isAppDebug() = this?.applicationInfo?.flags?.and(ApplicationInfo.FLAG_DEBUGGABLE) ?: 1 != 0
 }
