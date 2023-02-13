@@ -2,6 +2,7 @@ package com.zwping.jetpack.ktxs
 
 import android.view.View
 import android.view.animation.Animation
+import android.view.animation.CycleInterpolator
 import android.view.animation.OvershootInterpolator
 import android.view.animation.TranslateAnimation
 import android.widget.Checkable
@@ -41,10 +42,10 @@ inline fun <V : View> V.setOnDoubleClickListener(
 
 /*** 左右抖动 ***/
 inline fun View.shakelr() {
-    val animation = TranslateAnimation(-5F, 5F, 0F, 0F)
-    animation.interpolator = OvershootInterpolator()
-    animation.duration = 100
-    animation.repeatCount = 3
+    val animation = TranslateAnimation(0F, 20F, 0F, 0F)
+    animation.interpolator = CycleInterpolator(2)
+    animation.duration = 300
+    animation.repeatCount = 1
     animation.repeatMode = Animation.REVERSE
     startAnimation(animation)
 }

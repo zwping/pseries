@@ -23,7 +23,9 @@ import java.util.Map;
 
 /**
  * zwping @ 4/12/21
+ * @deprecated  {@link ResourceKtxKt}
  */
+@Deprecated
 public class ResourceJx {
 
     /**

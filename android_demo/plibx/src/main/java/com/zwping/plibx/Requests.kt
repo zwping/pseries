@@ -14,6 +14,7 @@ import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.RequestBody.Companion.toRequestBody
 import okio.*
+import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import java.io.FileOutputStream
@@ -28,6 +29,7 @@ import kotlin.random.Random
  * 简易封装okhttp
  *   - 满足restful api / down file / upload file / coroutine
  * zwping @ 5/24/21
+ * lastime: 2021年08月26日11:00:08
  */
 object Requests {
 
@@ -96,8 +98,10 @@ object Requests {
         enqueue(object : Callback {
             override fun onResponse(call: Call, response: Response) {
                 if (!response.isSuccessful) {
-                    onFailure(call, "请求失败-${response.code}")
-                    onEnd.invoke()
+                    handler.post {
+                        onFailure(call, "请求失败-${response.code}")
+                        onEnd.invoke()
+                    }
                     return
                 }
                 val fileName = if (name?.isNotEmpty() == true) name
@@ -254,6 +258,12 @@ object Requests {
     inline fun Response2.isSuccessful2Safe(): Boolean = isSuccessful && !responseStr.isNullOrBlank()
 
     inline fun String.toJSONObject(): JSONObject? = try { JSONObject(this) } catch (e: Exception) { null }
+    inline fun String.toJSONArray(): JSONArray? = try { JSONArray(this) } catch (e: Exception) { null }
+    inline fun RequestBody.toJSONObject(): JSONObject? { return try {
+        val copy = this; val buffer = Buffer(); copy.writeTo(buffer)
+        return JSONObject(buffer.readUtf8())
+    } catch (e: Exception) { null }
+    }
 
     /* ================================= */
 

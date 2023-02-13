@@ -84,11 +84,12 @@ inline fun WebView.js2Android(obj: Any, interfaceName: String) { // shouldOverri
     addJavascriptInterface(obj, interfaceName) // @JavascriptInterface
 }
 
-inline fun ProgressBar.setColors(bgColor: Int, progressColor: Int) {
+inline fun ProgressBar.setColors(bgColor: Int, progressColor: Int, secondaryProgress: Int = -1) {
     val bgClipDrawable = ClipDrawable(ColorDrawable(bgColor), Gravity.LEFT, ClipDrawable.HORIZONTAL)
     bgClipDrawable.level = 10000
     val progressClip = ClipDrawable(ColorDrawable(progressColor), Gravity.LEFT, ClipDrawable.HORIZONTAL)
-    val progressDrawables = arrayOf<Drawable>(bgClipDrawable, progressClip /*second*/, progressClip)
+    val secondaryClip = if (secondaryProgress == -1) null else ClipDrawable(ColorDrawable(secondaryProgress), Gravity.LEFT, ClipDrawable.HORIZONTAL)
+    val progressDrawables = arrayOf<Drawable>(bgClipDrawable, secondaryClip ?: progressClip, progressClip)
     val progressLayerDrawable = LayerDrawable(progressDrawables)
     progressLayerDrawable.setId(0, android.R.id.background)
     progressLayerDrawable.setId(1, android.R.id.secondaryProgress)

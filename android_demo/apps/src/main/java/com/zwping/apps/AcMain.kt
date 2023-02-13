@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ClipDrawable
 import android.graphics.drawable.GradientDrawable
@@ -12,16 +13,16 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.content.FileProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListUpdateCallback
 import com.bumptech.glide.Glide
 import com.zwping.apps.databinding.AcMainBinding
 import com.zwping.apps.databinding.ItemAppsBinding
@@ -35,9 +36,7 @@ import com.zwping.plibx.Requests.toJSONObject
 import kotlinx.coroutines.*
 import okhttp3.*
 import java.io.*
-import java.net.URL
 import java.text.SimpleDateFormat
-import kotlin.random.Random
 
 // 应用内测分发平台一键升级
 class AcMain : AppCompatActivity() {
@@ -60,6 +59,8 @@ class AcMain : AppCompatActivity() {
     private val vb by lazy { AcMainBinding.inflate(layoutInflater) }
     private fun getCtx(): Context = this
 
+//    private val orientationUtils =
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(vb.root)
@@ -67,14 +68,34 @@ class AcMain : AppCompatActivity() {
         vb.srl.setOnRefreshListener { getData() }
         vb.rv.layoutManager = LinearLayoutManager(this)
         vb.rv.adapter = adp
+
+//        val p = "https://mp3.yikaoapp.com/upload/mp4/bbs/596089/21072216544956.mp4"
+//        val c1 = "https://mp3.yikaoapp.com/upload/mp4/bbs/596089/21072216544956.mp4?x-oss-process=video/snapshot,t_1,f_jpg,w_360,h_480,m_fast,ar_auto"
+        val c1 = "https://mp3.yikaoapp.com/upload/mp4/bbs/596107/21072315424189.mp4?x-oss-process=video/snapshot,t_1,f_jpg,w_480,h_272,m_fast,ar_auto"
+        val p = "https://mp3.yikaoapp.com/upload/mp4/bbs/596107/21072315424189.mp4"
+        vb.videoPlayer.setDetails(p,c1)
+
     }
 
+    override fun onPause() {
+        super.onPause()
+        vb.videoPlayer.onPause()
+    }
+
+    override fun onBackPressed() {
+        if (vb.videoPlayer.onBackPressed()) return
+        super.onBackPressed()
+    }
 
     override fun onResume() {
         super.onResume()
-        vb.srl.isRefreshing = true
-        getData()
+//        vb.srl.isRefreshing = true
+//        getData()
+//        ITimer({ upFir() }, 1000).schedule(this)
+        vb.videoPlayer.onResume()
     }
+
+
 
     private fun showToast(msg: String) { Toast.makeText(this, msg, Toast.LENGTH_SHORT).show() }
 
@@ -273,7 +294,7 @@ class AcMain : AppCompatActivity() {
     }
 
     private fun upFir() {
-        val path = "${filesDir.absolutePath}/123.apk"
+        val path = "${filesDir.absolutePath}/手机加速_Canary.apk"
         lifecycleScope.launch {
             val certify  = async {
                 Requests.post("https://api.bq04.com/apps",
@@ -298,7 +319,7 @@ class AcMain : AppCompatActivity() {
                         { progress, curSize, total, fileName -> println("$progress -- $curSize -- $total $fileName") }
                     }
             ).enqueue2(this@AcMain,
-                    { call, response -> println(response.body?.string()) },
+                    { call, response, s -> println(s) },
                     { call, msg -> println(msg) })
         }
     }

@@ -20,7 +20,8 @@ import androidx.core.content.ContextCompat
  * zwping @ 12/29/20
  */
 val density by lazy { Resources.getSystem().displayMetrics.density }
-inline fun Float.dp2px(): Int = (0.5f + this * density).toInt()
+inline fun Float.dpToPx(): Float = 0.5f + this * density
+inline fun Float.dp2px(): Int = dpToPx().toInt()
 inline fun Int.px2dp(): Float = (this / density)
 
 inline fun String?.toInt2(): Int = if (this == null || this == "") 0 else toInt()

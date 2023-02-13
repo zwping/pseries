@@ -13,11 +13,17 @@ import androidx.viewbinding.ViewBinding
 /**
  * ViewBinding的成熟推动了原生Adapter实用
  * zwping @ 5/10/21
+ * lasttime: 2021年09月13日14:10:41
  */
 class RecyclerViewKtx
 
 /* ====================== */
 
+open class BaseAdapterQuick<E>(val vh: (ViewGroup) -> BaseVH<E, ViewBinding>): BaseAdapter<E>(){
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseVH<E, ViewBinding> {
+        return vh(parent)
+    }
+}
 abstract class BaseAdapter<E> : RecyclerView.Adapter<BaseVH<E, ViewBinding>>() {
 
     var datas = mutableListOf<E>()
@@ -34,6 +40,7 @@ abstract class BaseAdapter<E> : RecyclerView.Adapter<BaseVH<E, ViewBinding>>() {
     var datasStateCallback: DatasStataCallback? = null   // 控制RefreshLayout状态, util配置可兼容所有刷新控件
     var diffCallback : DiffCallback<E>? = null           // 初始化 才可Diff渲染数据
 
+    fun setDataOrNull(data: MutableList<E>?, detectMoves: Boolean = true) { setData(data ?: mutableListOf(), detectMoves) }
     fun setData(data: MutableList<E>, detectMoves: Boolean = true) {
         if (null == diffCallback) {
             datas = data; notifyDataSetChanged()
@@ -43,6 +50,7 @@ abstract class BaseAdapter<E> : RecyclerView.Adapter<BaseVH<E, ViewBinding>>() {
         DiffUtil.calculateDiff(_diffCallBack, detectMoves).dispatchUpdatesTo(this)
         datas = data
     }
+    fun addDataOrNull(data: MutableList<E>?) { if (!data.isNullOrEmpty()) addData(data) }
     fun addData(data: MutableList<E>) {
         datas.addAll(data); notifyItemRangeChanged(datas.size-data.size, datas.size)
         pag.curPage += 1
@@ -87,8 +95,8 @@ open class BaseVH<E, out VB : ViewBinding>(val vb: VB, private val bindViewHolde
     fun isLastPosition() = _datas.size-1 == adapterPosition
 }
 
-abstract class DiffCallback<E> {
-    abstract fun areItemsTheSame(od: E, nd: E): Boolean
+interface DiffCallback<E> {
+    fun areItemsTheSame(od: E, nd: E): Boolean
     fun areContentsTheSame(od: E, nd: E): Boolean = false
     fun getChangePayload(od: E, nd: E): Any? = null
 }
@@ -135,6 +143,7 @@ open class Pagination {
     var curPage = 1
     var curTotal = 0
 
+    var nextPage = -1
     var pageSize = 20
     var totalPage = -1
     var totalSize = -1
@@ -143,10 +152,14 @@ open class Pagination {
 
     /*** 是否到达最后一页 ***/
     fun hasEnd(): Boolean
-            = curTotal > 0 &&
-            ((totalPage > -1 && curPage >= totalPage) ||
-                    (totalSize > -1 && curTotal >= totalSize) ||
-                    ((-1 == totalPage && -1 == totalSize) && curTotal % pageSize != 0))  // 未填充总页数或总数，则以每页约定数量PageSize取模判断是否最后一页
+            = curTotal == 0 ||
+            (curTotal > 0 &&
+                    (
+                            (nextPage > -1 && curPage >= nextPage) ||
+                                    (totalPage > -1 && curPage >= totalPage) ||
+                                    (totalSize > -1 && curTotal >= totalSize) ||
+                                    ((-1 == nextPage && -1 == totalPage && -1 == totalSize) && curTotal % pageSize != 0)  // 未填充总页数或总数，则以每页约定数量PageSize取模判断是否最后一页
+                            ))
 }
 
 // diffUtil中易出现 Fix Google Bug https://stackoverflow.com/questions/31759171/recyclerview-and-java-lang-indexoutofboundsexception-inconsistency-detected-in/37050829

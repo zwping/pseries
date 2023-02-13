@@ -56,6 +56,9 @@ abstract class IJson(obj: JSONObject? = null) {
             for(i in 0 until length()) { lis.invoke(optJSONObject(i))?.also { data.add(it) } }
             return data
         }
+
+        fun JSONArray.forEach(lis: (ob: JSONObject?) -> Unit) { for (i in 0 until length()) { lis.invoke(optJSONObject(i)) } }
+        fun JSONArray.forEach(lis: (index: Int, ob: JSONObject?) -> Unit) { for (i in 0 until length()) { lis.invoke(i, optJSONObject(i)) } }
     }
 
 }

@@ -21,27 +21,17 @@ import androidx.appcompat.widget.AppCompatTextView
 
 /**
  * 状态布局切换 (loading / empty / error|netError / content)
+ * lasttime: 2021年08月26日11:34:40
  */
 class StateLayout @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
     companion object {
-        // 全局配置
-        var LoadingLayoutId: Int? = null
-        var EmptyLayoutId: Int? = null
-        var ErrorLayoutId: Int? = null
-        var DefaultProgressBarColor: Int? = null
-        var DefaultEmptyIconResId: Int? = null
-        var DefaultErrorIconResId: Int? = null
-        var DefaultNetErrorIconResId: Int? = null
-        var DefaultLoadingTxt = "加载中..."
-        var DefaultEmptyTxt = "暂无数据"
-        var DefaultErrorTxt = "加载失败\n轻触屏幕重新加载"
-        var DefaultNetErrorTxt = "无网络连接\n轻触屏幕重新加载"
-        var DefaultRemindTxtColor = Color.parseColor("#8a8a8a")
-        var DefaultRemindTxtSize = 15F // dp
-        var DefaultIconWidth = 85F // dp
+        var cfg = Cfg()
+
+        @JvmStatic
+        fun appInit(cfg: Cfg) { this.cfg = cfg }
 
         // 代码引用
         fun wrap(ac: Activity?): StateLayout = wrap(ac?.findViewById<ViewGroup>(android.R.id.content)?.getChildAt(0))
@@ -57,6 +47,23 @@ class StateLayout @JvmOverloads constructor(
             }
         }
 
+        data class Cfg(
+            var LoadingLayoutId: Int? = null,
+            var EmptyLayoutId: Int? = null,
+            var ErrorLayoutId: Int? = null,
+            var DefaultProgressBarColor: Int? = null,
+            var DefaultEmptyIconResId: Int? = null,
+            var DefaultErrorIconResId: Int? = null,
+            var DefaultNetErrorIconResId: Int? = null,
+            var DefaultLoadingTxt: String = "加载中...",
+            var DefaultEmptyTxt: String = "暂无数据",
+            var DefaultErrorTxt: String = "加载失败\n轻触屏幕重新加载",
+            var DefaultNetErrorTxt: String = "无网络连接\n轻触屏幕重新加载",
+            var DefaultRemindTxtColor: Int = Color.parseColor("#8a8a8a"),
+            var DefaultRemindTxtSize: Float = 15F, // dp
+            var DefaultIconWidth: Float = 85F, // dp
+        )
+
         private val density by lazy { Resources.getSystem().displayMetrics.density }
         private fun Float.dpToPx(): Float = 0.5f + this * density
         private fun Float.dp2px(): Int = dpToPx().toInt()
@@ -64,14 +71,15 @@ class StateLayout @JvmOverloads constructor(
 
     enum class State { CONTENT, LOADING, EMPTY, ERROR }
 
+    fun isLoadingState() = curState == State.LOADING
     // 句柄公开
     var curState: State = State.CONTENT // onFinishInflate后立即变为LOADING
         private set
     var animationDuration = 200L
     var retryClickListener: (() -> Unit)? = null
-    val loadingView: View by lazy { inflaterView(LoadingLayoutId) { DefaultLoadingView(getContext()) } }
-    val emptyView: View by lazy { inflaterView(EmptyLayoutId) { DefaultEmptyView(getContext()) } }
-    val errorView: View by lazy { inflaterView(ErrorLayoutId) { DefaultErrorView(getContext()) }.apply {
+    val loadingView: View by lazy { inflaterView(cfg.LoadingLayoutId) { DefaultLoadingView(getContext()) } }
+    val emptyView: View by lazy { inflaterView(cfg.EmptyLayoutId) { DefaultEmptyView(getContext()) } }
+    val errorView: View by lazy { inflaterView(cfg.ErrorLayoutId) { DefaultErrorView(getContext()) }.apply {
         setOnClickListener { Toast.makeText(getContext(), "未注册retryClick", Toast.LENGTH_SHORT).show() }
     } }
 
@@ -91,6 +99,8 @@ class StateLayout @JvmOverloads constructor(
     fun showLoadingView(txt: CharSequence? = null) { showView(State.LOADING, txt) }
     fun showEmptyView(txt: CharSequence? = null, iconResId: Int? = null) { showView(State.EMPTY, txt, iconResId) }
     fun showErrorView(txt: CharSequence? = null, iconResId: Int? = null) { showView(State.ERROR, txt, iconResId) }
+    fun showEmptyView(txt: CharSequence? = null) { showEmptyView(null, null) }
+    fun showErrorView(txt: CharSequence? = null) { showErrorView(null, null) }
     // fun setRetryClickListener(lis: ()->Unit) { this.retryClickListener = lis }
 
     private fun inflaterView(layoutId: Int?, defaultViewLazy: () -> View) : View {
@@ -102,6 +112,7 @@ class StateLayout @JvmOverloads constructor(
 
     private fun showView(state: State, txt: CharSequence? = null, iconResId: Int? = null) {
         if (curState == state) return
+        if (state == State.ERROR && curState == State.CONTENT) return
         curState = state
         for (i in 0 until childCount) { getChildAt(i).also { it.animate().cancel(); it.visibility = INVISIBLE } }
         when(state){
@@ -146,7 +157,7 @@ class StateLayout @JvmOverloads constructor(
             v.alpha = 0.1F
             v.animate().alpha(1F)
                 .setDuration(animationDuration)
-                .setStartDelay(if (curState == State.LOADING) 200 else 0) // 200ms后再展示loading
+                .setStartDelay(if (curState == State.LOADING) 300 else 0) // 300ms后再展示loading
                 .setListener(object: AnimatorListenerAdapter() {
                     override fun onAnimationStart(animation: Animator?) {
                         v.visibility = View.VISIBLE
@@ -161,23 +172,23 @@ class StateLayout @JvmOverloads constructor(
     private fun DefaultErrorView.autoShowErrType() {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
         val conn = cm?.activeNetworkInfo?.isConnected == true
-        remindTv.text = if (conn) DefaultErrorTxt else DefaultNetErrorTxt
-        if (DefaultErrorIconResId != null && DefaultNetErrorIconResId != null)
-            iconIv.setImageResource(if (conn) DefaultErrorIconResId!! else DefaultNetErrorIconResId!!)
+        remindTv.text = if (conn) cfg.DefaultErrorTxt else cfg.DefaultNetErrorTxt
+        if (cfg.DefaultErrorIconResId != null && cfg.DefaultNetErrorIconResId != null)
+            iconIv.setImageResource(if (conn) cfg.DefaultErrorIconResId!! else cfg.DefaultNetErrorIconResId!!)
     }
 
     /** 默认View **/
 
     private inner class DefaultLoadingView(context: Context) : LinearLayout(context) {
         val progressBar by lazy { ProgressBar(context).apply {
-            DefaultProgressBarColor?.also { indeterminateTintList = ColorStateList.valueOf(it) }
+            cfg.DefaultProgressBarColor?.also { indeterminateTintList = ColorStateList.valueOf(it) }
         } }
         val remindTv by lazy { AppCompatTextView(context).apply {
             layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             setPadding(0, 10F.dp2px(), 0, 0)
-            setTextColor(DefaultRemindTxtColor)
-            textSize = DefaultRemindTxtSize
-            text = DefaultLoadingTxt
+            setTextColor(cfg.DefaultRemindTxtColor)
+            textSize = cfg.DefaultRemindTxtSize
+            text = cfg.DefaultLoadingTxt
         } }
         init {
             orientation = VERTICAL
@@ -190,43 +201,43 @@ class StateLayout @JvmOverloads constructor(
 
     private inner class DefaultEmptyView(context: Context) : LinearLayout(context) {
         val iconIv by lazy { AppCompatImageView(context).apply {
-            layoutParams = LayoutParams(DefaultIconWidth.dp2px(), ViewGroup.LayoutParams.WRAP_CONTENT)
-            DefaultEmptyIconResId?.also { setImageResource(it) }
+            layoutParams = LayoutParams(cfg.DefaultIconWidth.dp2px(), ViewGroup.LayoutParams.WRAP_CONTENT)
+            cfg.DefaultEmptyIconResId?.also { setImageResource(it) }
         } }
         val remindTv by lazy { AppCompatTextView(context).apply {
             layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            setTextColor(DefaultRemindTxtColor)
-            textSize = DefaultRemindTxtSize
-            text = DefaultEmptyTxt
+            setTextColor(cfg.DefaultRemindTxtColor)
+            textSize = cfg.DefaultRemindTxtSize
+            text = cfg.DefaultEmptyTxt
         } }
         init {
             orientation = VERTICAL
             layoutTransition = LayoutTransition()
             gravity = Gravity.CENTER
             addView(iconIv)
-            if (DefaultEmptyIconResId != null) remindTv.setPadding(0, 10F.dp2px(), 0, 0)
+            if (cfg.DefaultEmptyIconResId != null) remindTv.setPadding(0, 10F.dp2px(), 0, 0)
             addView(remindTv)
         }
     }
 
     private inner class DefaultErrorView(context: Context) : LinearLayout(context) {
         val iconIv by lazy { AppCompatImageView(context).apply {
-            layoutParams = LayoutParams(DefaultIconWidth.dp2px(), ViewGroup.LayoutParams.WRAP_CONTENT)
-            DefaultErrorIconResId?.also { setImageResource(it) }
+            layoutParams = LayoutParams(cfg.DefaultIconWidth.dp2px(), ViewGroup.LayoutParams.WRAP_CONTENT)
+            cfg.DefaultErrorIconResId?.also { setImageResource(it) }
         } }
         val remindTv by lazy { AppCompatTextView(context).apply {
             layoutParams = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
             gravity = Gravity.CENTER
-            setTextColor(DefaultRemindTxtColor)
-            textSize = DefaultRemindTxtSize
-            text = DefaultErrorTxt
+            setTextColor(cfg.DefaultRemindTxtColor)
+            textSize = cfg.DefaultRemindTxtSize
+            text = cfg.DefaultErrorTxt
         } }
         init {
             orientation = VERTICAL
             layoutTransition = LayoutTransition()
             gravity = Gravity.CENTER
             addView(iconIv)
-            if (DefaultErrorIconResId != null) remindTv.setPadding(0, 10F.dp2px(), 0, 0)
+            if (cfg.DefaultErrorIconResId != null) remindTv.setPadding(0, 10F.dp2px(), 0, 0)
             addView(remindTv)
         }
     }
