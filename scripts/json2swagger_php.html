@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JSON to Swagger-PHP</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      box-sizing: border-box;
+      border-right: 1px solid #ddd;
+    }
+    .container:last-child {
+      border-right: none;
+    }
+    textarea {
+      width: 100%;
+      height: 80%;
+      resize: none;
+      margin-bottom: 10px;
+      padding: 10px;
+      box-sizing: border-box;
+      font-family: monospace;
+      font-size: 14px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 14px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: #007BFF;
+      color: white;
+    }
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    .output {
+      white-space: pre-wrap;
+      background: #f8f9fa;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      height: 80%;
+      overflow-y: auto;
+      font-family: monospace;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" style="flex: 0.6">
+    <h3>Paste JSON</h3>
+    <textarea id="jsonInput" placeholder="Paste your JSON here...">
+        {
+            "id": 100,
+            "name": "zwp",
+            "score": 99.9,
+            "yes": true,
+            "yes1": false,
+            "images": [
+                {"name": "1", "url": "http://img.com/1.png"},
+                {"name": "2", "url": "http://img.com/1.png"},
+                {"name": "3", "url": "http://img.com/1.png"}
+            ],
+            "image": {"name": "", "url": "http://img.com/1.png", "info": {"avatar": "http://img.com/avatar.png"}}
+        }
+    </textarea>
+    <button id="generateBtn">Generate & Copy Swagger-PHP</button>
+  </div>
+  <div class="container">
+    <h3>Generated Swagger-PHP</h3>
+    <div id="output" class="output"></div>
+  </div>
+  <!--
+  /**
+  * @OA\Schema(
+  *   schema="Comm.BaseResponse",
+  *   type="object",
+  *   @OA\Property(property="code", type="integer", description="状态码", example=200),
+  *   @OA\Property(property="msg", type="string", description="消息说明", example="ok"),
+  *   @OA\Property(property="data", type="object", description="响应数据", nullable=true)
+  * ) 
+  */
+  -->
+  <script>
+    const jsonInput = document.getElementById('jsonInput');
+    const generateBtn = document.getElementById('generateBtn');
+    const output = document.getElementById('output');
+
+    function getValueType(value) {
+        let type = typeof value === 'object' && value !== null ? 'object' : typeof value;
+        if (type === 'number') type = /^\d+$/.test(value) ? 'integer' : 'number'
+        if (type === 'object') type = value instanceof Array ? 'array' : 'object'
+        return type // string number integer boolean array object
+    }
+
+    // Function to convert JSON to Swagger-PHP annotations
+    function jsonToSwaggerPHP(json, schema='') {
+      let output2 = ""
+      let output = "/**\n"
+      output += "* @OA\\Schema(\n"
+      output += `*   schema="XX.${schema}",\n`
+      output += `*   type="object",\n`
+      try {
+        const obj = JSON.parse(json);
+        for (const [key, value] of Object.entries(obj)) {
+          const type = getValueType(value)
+          if (type === 'array') {
+            
+          }
+          const example = ['object', 'array'].includes(type) ? JSON.stringify('array' === type ? value.splice(0, 2) : value) : value
+          output += `*   @OA\\Property(property="${key}", type="${type}", description="${key}", example="${example}"),\n`
+        }
+        output += "* )\n";
+        output += "*/";
+        return output;
+      } catch (error) {
+        console.log(error);
+        return "Invalid JSON. Please check your input.";
+      }
+    }
+
+    // Generate Swagger-PHP annotations and copy to clipboard
+    generateBtn.addEventListener('click', () => {
+      const json = jsonInput.value.trim();
+      if (json) {
+        const swaggerPHP = jsonToSwaggerPHP(json);
+        output.textContent = swaggerPHP;
+        jsonInput.value = JSON.stringify(JSON.parse(json), null, 4)
+
+        // Copy to clipboard
+        navigator.clipboard.writeText(swaggerPHP).then(() => {
+        //   alert("Swagger-PHP copied to clipboard!");
+        }).catch((error) => {
+          alert("Failed to copy: " + error);
+        });
+      } else {
+        output.textContent = "Please paste JSON to generate.";
+        alert("No JSON input detected.");
+      }
+    });
+  </script>
+</body>
+</html>
