@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,7 @@
       height: 100vh;
       margin: 0;
     }
+
     .container {
       flex: 1;
       display: flex;
@@ -19,9 +21,11 @@
       box-sizing: border-box;
       border-right: 1px solid #ddd;
     }
+
     .container:last-child {
       border-right: none;
     }
+
     textarea {
       width: 100%;
       height: 80%;
@@ -34,6 +38,7 @@
       border: 1px solid #ccc;
       border-radius: 4px;
     }
+
     button {
       padding: 10px 20px;
       font-size: 14px;
@@ -43,13 +48,18 @@
       background-color: #007BFF;
       color: white;
     }
+
     button:disabled {
       background-color: #ccc;
       cursor: not-allowed;
     }
+
+    .jsonInput {
+      background: #f8f9fa;
+    }
+
     .output {
       white-space: pre-wrap;
-      background: #f8f9fa;
       padding: 10px;
       border: 1px solid #ccc;
       border-radius: 4px;
@@ -58,12 +68,45 @@
       font-family: monospace;
       font-size: 14px;
     }
+
+    /* 提示区域样式 */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 15px 20px;
+      border-radius: 5px;
+      font-size: 16px;
+      color: white;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 999;
+    }
+
+    .notification.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .notification.success {
+      background-color: #28a745;
+    }
+
+    .notification.error {
+      background-color: #dc3545;
+    }
   </style>
 </head>
+
 <body>
+  <!-- 提示区域 -->
+  <div id="notification" class="notification">123123</div>
+
   <div class="container" style="flex: 0.6">
     <h3>Paste JSON</h3>
-    <textarea id="jsonInput" placeholder="Paste your JSON here...">
+    <textarea id="jsonInput" class="jsonInput" placeholder="Paste your JSON here...">
         {
             "id": 100,
             "name": "zwp",
@@ -73,60 +116,78 @@
             "images": [
                 {"name": "1", "url": "http://img.com/1.png"},
                 {"name": "2", "url": "http://img.com/1.png"},
-                {"name": "3", "url": "http://img.com/1.png"}
+                {"name": "3", "url": "http://img.com/1.png"},
+                {"name": "4", "url": "http://img.com/1.png"},
+                {"name": "5", "url": "http://img.com/1.png"}
             ],
-            "image": {"name": "", "url": "http://img.com/1.png", "info": {"avatar": "http://img.com/avatar.png"}}
+            "ids": [1,2,3,4,5],
+            "user": {
+              "name": "", 
+              "url": "http://img.com/1.png", 
+              "info": {
+                "avatar": "http://img.com/avatar.png",
+                "ids": [10,11,12,13,14],
+                "school": {
+                  "name": "南昌大学",
+                  "school_id": 100
+                }
+              }
+            }
         }
     </textarea>
     <button id="generateBtn">Generate & Copy Swagger-PHP</button>
   </div>
   <div class="container">
     <h3>Generated Swagger-PHP</h3>
-    <div id="output" class="output"></div>
+    <textarea id="output" class="output"></textarea>
+    <button onclick="copySwagger()">Copy Swagger-PHP</button>
   </div>
-  <!--
-  /**
-  * @OA\Schema(
-  *   schema="Comm.BaseResponse",
-  *   type="object",
-  *   @OA\Property(property="code", type="integer", description="状态码", example=200),
-  *   @OA\Property(property="msg", type="string", description="消息说明", example="ok"),
-  *   @OA\Property(property="data", type="object", description="响应数据", nullable=true)
-  * ) 
-  */
-  -->
   <script>
     const jsonInput = document.getElementById('jsonInput');
     const generateBtn = document.getElementById('generateBtn');
     const output = document.getElementById('output');
 
     function getValueType(value) {
-        let type = typeof value === 'object' && value !== null ? 'object' : typeof value;
-        if (type === 'number') type = /^\d+$/.test(value) ? 'integer' : 'number'
-        if (type === 'object') type = value instanceof Array ? 'array' : 'object'
-        return type // string number integer boolean array object
+      let type = typeof value === 'object' && value !== null ? 'object' : typeof value;
+      if (type === 'number') type = /^\d+$/.test(value) ? 'integer' : 'number'
+      if (type === 'object') type = value instanceof Array ? 'array' : 'object'
+      return type // string number integer boolean array object
     }
 
     // Function to convert JSON to Swagger-PHP annotations
-    function jsonToSwaggerPHP(json, schema='') {
+    function jsonToSwaggerPHP(obj, schema = '') {
       let output2 = ""
       let output = "/**\n"
       output += "* @OA\\Schema(\n"
       output += `*   schema="XX.${schema}",\n`
       output += `*   type="object",\n`
       try {
-        const obj = JSON.parse(json);
         for (const [key, value] of Object.entries(obj)) {
           const type = getValueType(value)
           if (type === 'array') {
-            
+
           }
-          const example = ['object', 'array'].includes(type) ? JSON.stringify('array' === type ? value.splice(0, 2) : value) : value
-          output += `*   @OA\\Property(property="${key}", type="${type}", description="${key}", example="${example}"),\n`
+          const example = ['object', 'array'].includes(type) ? JSON.stringify('array' === type ? value.filter((_, i) => i < 3) : value) : value
+          let ref = ''
+          if ('object' === type) {
+            ref = `, ref="#/components/schemas/XX.${key.replace(/^\w/, c => c.toUpperCase())}"`
+            output2 += jsonToSwaggerPHP(value, key)
+          }
+          let items = ''
+          if ('array' === type && value.length > 0) {
+            const type1 = getValueType(value[0])
+
+            if (['object', 'array'].includes(type1)) {
+              items = `, @OA\\Items(type="${type1}")`
+            } else {
+              items = `, @OA\\Items(type="${type1}")`
+            }
+          }
+          output += `*   @OA\\Property(property="${key}", type="${type}", description="${key}"${items}${ref}, example="${example}"),\n`
         }
         output += "* )\n";
-        output += "*/";
-        return output;
+        output += "*/\n\n";
+        return output + output2;
       } catch (error) {
         console.log(error);
         return "Invalid JSON. Please check your input.";
@@ -135,23 +196,82 @@
 
     // Generate Swagger-PHP annotations and copy to clipboard
     generateBtn.addEventListener('click', () => {
+      genSwagger()
+    });
+
+    function genSwagger() {
       const json = jsonInput.value.trim();
       if (json) {
-        const swaggerPHP = jsonToSwaggerPHP(json);
+        const swaggerPHP = jsonToSwaggerPHP(JSON.parse(json));
         output.textContent = swaggerPHP;
+
         jsonInput.value = JSON.stringify(JSON.parse(json), null, 4)
 
-        // Copy to clipboard
-        navigator.clipboard.writeText(swaggerPHP).then(() => {
-        //   alert("Swagger-PHP copied to clipboard!");
-        }).catch((error) => {
-          alert("Failed to copy: " + error);
-        });
+        copySwagger()
       } else {
         output.textContent = "Please paste JSON to generate.";
-        alert("No JSON input detected.");
+        showNotification("No JSON input detected.", 'error');
+      }
+    }
+
+
+    // 复制 Swagger-PHP 内容
+    function copySwagger() {
+      // output.select();
+      // output.setSelectionRange(0, 99999); // For mobile devices
+      // navigator.clipboard.writeText(output.value).then(() => {
+      //   showNotification("Swagger-PHP 注释已复制！", 'success');
+      // }).catch(err => {
+      //   showNotification("复制失败，请手动选择内容进行复制！", 'error');
+      // });
+
+      // Copy to clipboard
+      navigator.clipboard.writeText(output.value).then(() => {
+        showNotification("Swagger-PHP copied to clipboard!", 'success');
+      }).catch((error) => {
+        showNotification("Failed to copy: " + error, 'error');
+      });
+    }
+
+    // 提示功能
+    function showNotification(message, type = 'success') {
+      const notification = document.getElementById("notification");
+      notification.textContent = message;
+      notification.className = `notification ${type} show`;
+      setTimeout(() => {
+        notification.className = "notification"; // 3秒后自动隐藏
+      }, 3000);
+    }
+
+    let lastClipboardTime = 0
+
+    // 从剪贴板读取数据并自动处理
+    async function readClipboard() {
+      const lt = new Date().getTime()
+      if (lt - lastClipboardTime < 3 * 1000 || jsonInput.value) { // 间隔3s 读取剪切板
+        return
+      }
+      lastClipboardTime = lt
+
+      try {
+        const text = await navigator.clipboard.readText();
+        jsonInput.value = text;
+        genSwagger()
+      } catch (error) {
+        showNotification("无法读取剪贴板数据！", "error");
+      }
+    }
+
+    // 监听 Tab 切换回当前页面
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden) {
+        readClipboard();
       }
     });
+
+    // 页面加载时尝试读取剪贴板
+    window.addEventListener("focus", readClipboard);
   </script>
 </body>
+
 </html>
