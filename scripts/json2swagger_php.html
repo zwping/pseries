@@ -149,8 +149,8 @@
 
     function getValueType(value) {
       let type = typeof value === 'object' && value !== null ? 'object' : typeof value;
-      if (type === 'number') type = /^\d+$/.test(value) ? 'integer' : 'number'
-      if (type === 'object') type = value instanceof Array ? 'array' : 'object'
+      if (type === 'number' && /^\d+$/.test(value)) return 'integer'
+      if (type === 'object' && value instanceof Array) return 'array'
       return type // string number integer boolean array object
     }
 
