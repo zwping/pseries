@@ -159,7 +159,7 @@
       let output2 = ""
       let output = "/**\n"
       output += "* @OA\\Schema(\n"
-      output += `*   schema="XX.${schema}",\n`
+      output += `*   schema="XX.${schema.replace(/^\w/, c => c.toUpperCase())}",\n`
       output += `*   type="object",\n`
       try {
         for (const [key, value] of Object.entries(obj)) {
