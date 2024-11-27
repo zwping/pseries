@@ -213,7 +213,8 @@
             } else if ('array' == type1) {
               // const type2 = getValueType(value[0][0])
             } else {
-              items = `, @OA\\Items(type="${type1}")`
+              example = value.filter((_, i)=> i < 3).map(it=> `"${it}"`).join(',')
+              items = `, @OA\\Items(type="${type1}", example={${example}})`
             }
             example = ''
           }
