@@ -180,6 +180,7 @@
     const output = document.getElementById('output');
 
     function getValueType(value) {
+      if (value === 'null' || value === null) return 'string'
       let type = typeof value === 'object' && value !== null ? 'object' : typeof value;
       if (type === 'number' && /^\d+$/.test(value)) return 'integer'
       if (type === 'object' && value instanceof Array) return 'array'
@@ -198,6 +199,7 @@
         let outputs = []
         for (const [key, value] of Object.entries(obj)) {
           const type = getValueType(value)
+          // let example = ['object', 'array'].includes(type) ? JSON.stringify(simpleExample(value)) : (type === 'string' && (value === null || value === "") ? " " : value)
           let example = ['object', 'array'].includes(type) ? JSON.stringify(simpleExample(value)) : value
           let ref = ''
           if ('object' === type) {
@@ -221,7 +223,7 @@
           example = example ? `, example="${example}"` : ""
           outputs.push(` *   @OA\\Property(property="${key}", type="${type}", description="${key}"${items}${ref}${example})`)
         }
-        output += outputs.join(',\n') + '\n'
+        output += outputs.join(',\n') + ',\n'
         output += " * )\n";
         output += " */\n\n";
         return output + output2;
